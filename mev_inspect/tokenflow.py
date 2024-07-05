@@ -3,7 +3,7 @@ from typing import List, Optional
 from mev_inspect.schemas.blocks import Block
 from mev_inspect.schemas.traces import Trace, TraceType
 
-weth_address = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+weth_address = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
 
 cache_directory = "./cache"
 
@@ -11,18 +11,18 @@ cache_directory = "./cache"
 def is_stablecoin_address(address):
     # to look for stablecoin inflow/outflows
     stablecoin_addresses = [
-        "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",  # USDC
-        "0xdac17f958d2ee523a2206206994597c13d831ec7",  # USDT
-        "0x6b175474e89094c44da98b954eedeac495271d0f",  # DAI
-        "0x0000000000085d4780b73119b644ae5ecd22b376",  # TUSD
-        "0x4fabb145d64652a948d72533023f6e7a623c7c53",  # BUSD
-        "0x8e870d67f660d95d5be530380d0ec0bd388289e1",  # PAX
-        "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",  # FEI
-        "0x853d955aCEf822Db058eb8505911ED77F175b99e",  # FRAX
-        "0xBC6DA0FE9aD5f3b0d58160288917AA56653660E9",  # alUSD
-        "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51",  # sUSD
-        "0x5f98805A4E8be255a32880FDeC7F6728C6568bA0",  # lUSD
-        "0x674C6Ad92Fd080e4004b2312b45f796a192D27a0",  # USDN
+        "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d",  # USDC 
+        "0x55d398326f99059fF775485246999027B3197955",  # USDT
+        "0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3",  # DAI
+        "0x40af3827F39D0EAcBF4A168f8D4ee67c121D11c9",  # TUSD
+        "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",  # BUSD
+        "0xb7F8Cd00C5A06c0537E2aBfF0b58033d02e5E094",  # PAX
+        # "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",  # FEI
+        "0x90c97f71e18723b0cf0dfa30ee176ab653e89f40",  # FRAX
+        # "0xBC6DA0FE9aD5f3b0d58160288917AA56653660E9",  # alUSD
+        # "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51",  # sUSD
+        # "0x5f98805A4E8be255a32880FDeC7F6728C6568bA0",  # lUSD
+        # "0x674C6Ad92Fd080e4004b2312b45f796a192D27a0",  # USDN
     ]
     return address in stablecoin_addresses
 
@@ -30,28 +30,52 @@ def is_stablecoin_address(address):
 def is_known_router_address(address):
     # to exclude known router addresses from token flow analysis
     known_router_addresses = [
-        "0x3D71d79C224998E608d03C5Ec9B405E7a38505F0",  # keeper dao, whitelists extraction
-        "0x11111254369792b2Ca5d084aB5eEA397cA8fa48B",  # 1inch v1 router
-        "0x111111125434b319222cdbf8c261674adb56f3ae",  # 1inch v2 router
-        "0x11111112542d85b3ef69ae05771c2dccff4faa26",  # 1inch v3 router
-        "0xa356867fdcea8e71aeaf87805808803806231fdc",  # DODO
-        "0xdef1c0ded9bec7f1a1670819833240f027b25eff",  # 0x proxy
-        "0x90f765f63e7dc5ae97d6c576bf693fb6af41c129",  # Set Trade
-        "0x7113dd99c79aff93d54cfa4b2885576535a132de",  # Totle exchange
-        "0x9509665d015bfe3c77aa5ad6ca20c8afa1d98989",  # Paraswap
-        "0x86969d29F5fd327E1009bA66072BE22DB6017cC6",  # Paraswap v2
-        "0xf90e98f3d8dce44632e5020abf2e122e0f99dfab",  # Paraswap v3
-        "0x57805e5a227937bac2b0fdacaa30413ddac6b8e1",  # Furucombo
-        "0x17e8ca1b4798b97602895f63206afcd1fc90ca5f",  # Furucombo proxy
-        "0x881d40237659c251811cec9c364ef91dc08d300c",  # Metamask swap
-        "0x745daa146934b27e3f0b6bff1a6e36b9b90fb131",  # DEX.ag
-        "0xb2be281e8b11b47fec825973fc8bb95332022a54",  # Zerion SDK
-        "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",  # UniswapV2Router02
-        "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F",  # SushiswapV2Router02
-        "0xE592427A0AEce92De3Edee1F18E0157C05861564",  # Uniswap v3 router
-        "0x3E66B66Fd1d0b02fDa6C811Da9E0547970DB2f21",  # Balance exchange proxy
-        "0x1bD435F3C054b6e901B7b108a0ab7617C808677b",  # Paraswap v4
-        "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F",  # SNX proxy synth issuer
+        # "0x3D71d79C224998E608d03C5Ec9B405E7a38505F0",  # keeper dao, whitelists extraction
+        # "0x11111254369792b2Ca5d084aB5eEA397cA8fa48B",  # 1inch v1 router
+        # "0x111111125434b319222CdBf8C261674aDB56F3ae",  # 1inch v2 router
+
+        # "0xa356867fdcea8e71aeaf87805808803806231fdc",  # DODO
+        # "0xdef1c0ded9bec7f1a1670819833240f027b25eff",  # 0x proxy
+        # "0x90f765f63e7dc5ae97d6c576bf693fb6af41c129",  # Set Trade
+        # "0x7113dd99c79aff93d54cfa4b2885576535a132de",  # Totle exchange
+        # "0x9509665d015bfe3c77aa5ad6ca20c8afa1d98989",  # Paraswap
+        # "0x86969d29F5fd327E1009bA66072BE22DB6017cC6",  # Paraswap v2
+        # "0xf90e98f3d8dce44632e5020abf2e122e0f99dfab",  # Paraswap v3
+        # "0x57805e5a227937bac2b0fdacaa30413ddac6b8e1",  # Furucombo
+        # "0x17e8ca1b4798b97602895f63206afcd1fc90ca5f",  # Furucombo proxy
+        # "0x881d40237659c251811cec9c364ef91dc08d300c",  # Metamask swap
+        # "0x745daa146934b27e3f0b6bff1a6e36b9b90fb131",  # DEX.ag
+        # "0xb2be281e8b11b47fec825973fc8bb95332022a54",  # Zerion SDK
+        # "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",  # UniswapV2Router02
+        # "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F",  # SushiswapV2Router02
+        # "0xE592427A0AEce92De3Edee1F18E0157C05861564",  # Uniswap v3 router
+        # "0x3E66B66Fd1d0b02fDa6C811Da9E0547970DB2f21",  # Balance exchange proxy
+        # "0x1bD435F3C054b6e901B7b108a0ab7617C808677b",  # Paraswap v4
+        # "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F",  # SNX proxy synth issuer
+
+        "0x5Dc88340E1c5c6366864Ee415d6034cadd1A9897", # UniswapV2Router02
+        "0xB971eF87ede563556b2ED4b1C0b0019111Dd85d2", # Uniswap v3 router
+        "0x11111112542d85b3ef69ae05771c2dccff4faa26", # 1inch v3 router
+        "0x1111111254fb6c44bAC0beD2854e76F90643097d", # 1inch v4 router
+        "0x62c1A0d92B09D0912F7BB9c96C5ecdC7F2b87059", # Mdex
+        "0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F", # pancakeV1
+        "0x10ed43c718714eb63d5aa57b78b54704e256024e", # Pancake V2
+        "0x1b81D678ffb9C0263b24A97847620C99d213eB14", # Pancake V3
+        "0xbe65b8f75b9f20f4c522e0067a3887fada714800", # jetswap
+        "0x3a6d8cA21D1CF76F653A67577FA0D27453350dD8", # biSwap
+        "0x13147820401f455e3318db8686958D457ad2E7b0", # nomiSwap
+        "0xCDe540d7eAFE93aC5fE6233Bee57E1270D3E330F", # backerySwap
+        "0xC9a0F685F39d05D835c369036251ee3aEaaF3c47", # babyDogeSwap
+        "0x0841BD0B734E4F5853f0dD8d7Ea041c241fb0Da6", # apeSwap
+        "0xB0EeB0632bAB15F120735e5838908378936bd484", # autoshark
+        "0xc25033218D181b27D4a2944Fbb04FC055da4EAB3", # melegaSwap
+        "0x151030a9Fa62FbB202eEe50Bd4A4057AB9E826AD", # definixSwap
+        "0x8317c460C22A9958c27b4B6403b98d2Ef4E2ad32", # babySwap
+        "0x29D1Adbb65d93a5710cafe2EF0E8131f64E6AB22", # pandaswap
+        "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506", # sushiSwap
+        "0x319EF69a98c8E8aAB36Aea561Daba0Bf3D0fa3ac", # pinkswap
+        "0x05E61E0cDcD2170a76F9568a110CEe3AFdD6c46f", # knightswap
+
     ]
     return address in known_router_addresses
 

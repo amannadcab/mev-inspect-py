@@ -38,18 +38,19 @@ def _get_swaps_for_transaction(traces: List[ClassifiedTrace]) -> List[Swap]:
                 prior_transfers.append(transfer)
 
         elif trace.classification == Classification.swap:
+  
             child_transfers = get_child_transfers(
                 trace.transaction_hash,
                 trace.trace_address,
                 traces,
             )
-
+           
             swap = _parse_swap(
                 trace,
                 remove_child_transfers_of_transfers(prior_transfers),
                 remove_child_transfers_of_transfers(child_transfers),
             )
-
+          
             if swap is not None:
                 swaps.append(swap)
 
@@ -61,7 +62,6 @@ def _parse_swap(
     prior_transfers: List[Transfer],
     child_transfers: List[Transfer],
 ) -> Optional[Swap]:
-
     classifier = get_classifier(trace)
     if classifier is not None and issubclass(classifier, SwapClassifier):
         return classifier.parse_swap(trace, prior_transfers, child_transfers)

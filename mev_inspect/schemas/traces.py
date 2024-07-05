@@ -39,6 +39,10 @@ class Classification(Enum):
 class Protocol(Enum):
     uniswap_v2 = "uniswap_v2"
     uniswap_v3 = "uniswap_v3"
+    pancake_v2 = "pancake_v2"
+    pancake_v3 = "pancake_v3"
+    odos = "odos"
+    apeswap = "apeswap"
     sushiswap = "sushiswap"
     aave = "aave"
     weth = "weth"

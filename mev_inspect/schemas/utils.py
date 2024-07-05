@@ -1,7 +1,7 @@
 import json
 
 from hexbytes import HexBytes
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 from web3.datastructures import AttributeDict
 
 
@@ -23,6 +23,11 @@ class Web3Model(BaseModel):
             AttributeDict: dict,
             HexBytes: lambda h: h.hex(),
         }
+        @validator('*', pre=True, always=True)
+        def validate_hex_bytes(cls, value):
+            if isinstance(value, HexBytes):
+                return value.hex()
+            return value
 
 
 class CamelModel(BaseModel):
@@ -31,3 +36,10 @@ class CamelModel(BaseModel):
     class Config(Web3Model.Config):
         alias_generator = to_camel
         allow_population_by_field_name = True
+    @validator('*', pre=True, always=True)
+    def validate_hex_bytes(cls, value):
+        if isinstance(value, HexBytes):
+            return value.hex()
+        return value
+
+

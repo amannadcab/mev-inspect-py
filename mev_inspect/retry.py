@@ -13,7 +13,7 @@ from aiohttp.client_exceptions import (
 )
 from requests.exceptions import ConnectionError, HTTPError, Timeout, TooManyRedirects
 from web3 import Web3
-from web3.middleware.exception_retry_request import whitelist
+from web3.middleware.exception_retry_request import DEFAULT_ALLOWLIST
 from web3.types import RPCEndpoint, RPCResponse
 
 request_exceptions = (ConnectionError, HTTPError, Timeout, TooManyRedirects)
@@ -32,9 +32,9 @@ logger = logging.getLogger(__name__)
 
 def check_if_retry_on_failure(method: RPCEndpoint) -> bool:
     root = method.split("_")[0]
-    if root in (whitelist + whitelist_additions):
+    if root in (DEFAULT_ALLOWLIST + whitelist_additions):
         return True
-    elif method in (whitelist + whitelist_additions):
+    elif method in (DEFAULT_ALLOWLIST + whitelist_additions):
         return True
     else:
         return False

@@ -3,9 +3,8 @@ from typing import List, Optional
 from mev_inspect.schemas.sandwiches import Sandwich
 from mev_inspect.schemas.swaps import Swap
 
-UNISWAP_V2_ROUTER = "0x7a250d5630b4cf539739df2c5dacb4c659f2488d"
-UNISWAP_V3_ROUTER = "0xe592427a0aece92de3edee1f18e0157c05861564"
-UNISWAP_V3_ROUTER_2 = "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45"
+UNISWAP_V2_ROUTER = "0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24"
+UNISWAP_V3_ROUTER_2 = "0xB971eF87ede563556b2ED4b1C0b0019111Dd85d2"
 
 
 def get_sandwiches(swaps: List[Swap]) -> List[Sandwich]:
@@ -37,7 +36,6 @@ def _get_sandwich_starting_with_swap(
 
     if sandwicher_address in [
         UNISWAP_V2_ROUTER,
-        UNISWAP_V3_ROUTER,
         UNISWAP_V3_ROUTER_2,
     ]:
         return None

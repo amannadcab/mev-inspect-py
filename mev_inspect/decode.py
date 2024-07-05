@@ -1,8 +1,9 @@
 from typing import Dict, Optional
-
+import eth_abi
+from eth_abi import decode 
+import eth_abi.decoding
 import eth_utils.abi
-from eth_abi import decode_abi
-from eth_abi.exceptions import InsufficientDataBytes, NonEmptyPaddingBytes
+from eth_abi.exceptions import InsufficientDataBytes, NonEmptyPaddingBytes,InvalidPointer
 from hexbytes._utils import hexstr_to_bytes
 
 from mev_inspect.schemas.abi import ABI, ABIFunctionDescription
@@ -37,8 +38,8 @@ class ABIDecoder:
         ]
 
         try:
-            decoded = decode_abi(types, hexstr_to_bytes(params))
-        except (InsufficientDataBytes, NonEmptyPaddingBytes, OverflowError):
+            decoded = eth_abi.decode(types, hexstr_to_bytes(params))
+        except (InsufficientDataBytes, NonEmptyPaddingBytes, OverflowError,InvalidPointer):
             return None
 
         return CallData(

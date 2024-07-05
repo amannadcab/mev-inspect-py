@@ -120,8 +120,9 @@ async def inspect_many_blocks(
         logger.info(
             f"Block: {block_number} -- Total transactions: {total_transactions}"
         )
-
+  
         classified_traces = trace_classifier.classify(block.traces)
+        # print(classified_traces)
         logger.info(
             f"Block: {block_number} -- Returned {len(classified_traces)} classified traces"
         )

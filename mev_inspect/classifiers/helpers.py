@@ -69,12 +69,12 @@ def create_swap_from_pool_transfers(
     child_transfers: List[Transfer],
 ) -> Optional[Swap]:
     pool_address = trace.to_address
-
+ 
     transfers_to_pool = []
-
+    # print(trace,prior_transfers,child_transfers,recipient_address,pool_address)
     if trace.value is not None and trace.value > 0:
         transfers_to_pool = [_build_eth_transfer(trace)]
-
+        
     if len(transfers_to_pool) == 0:
         transfers_to_pool = _filter_transfers(prior_transfers, to_address=pool_address)
 
@@ -173,12 +173,10 @@ def _filter_transfers(
     filtered_transfers = []
 
     for transfer in transfers:
-        if to_address is not None and transfer.to_address != to_address:
+        if to_address is not None and transfer.to_address.lower() != to_address.lower():
             continue
-
-        if from_address is not None and transfer.from_address != from_address:
+        if from_address is not None and transfer.from_address.lower() != from_address.lower():
             continue
-
         filtered_transfers.append(transfer)
 
     return filtered_transfers

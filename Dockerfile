@@ -12,7 +12,7 @@ RUN useradd --create-home flashbot \
 ENV PATH="${PATH}:/home/flashbot/.local/bin"
 
 COPY --chown=flashbot ./pyproject.toml /app/pyproject.toml
-COPY --chown=flashbot ./poetry.lock /app/poetry.lock
+# COPY --chown=flashbot ./poetry.lock /app/poetry.lock
 WORKDIR /app/
 
 USER flashbot

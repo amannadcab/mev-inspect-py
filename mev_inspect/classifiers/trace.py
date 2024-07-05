@@ -63,10 +63,9 @@ class TraceClassifier:
 
                 if action.to not in lower_valid_addresses:
                     continue
-
+          
             decoder = self._decoders_by_abi_name[spec.abi_name]
             call_data = decoder.decode(action.input)
-
             if call_data is not None:
                 signature = call_data.function_signature
                 classifier = spec.classifiers.get(signature)
@@ -75,7 +74,7 @@ class TraceClassifier:
                     if classifier is None
                     else classifier.get_classification()
                 )
-
+            
                 return DecodedCallTrace(
                     **trace.dict(),
                     trace_type=trace.type,

@@ -28,14 +28,16 @@ async def create_from_block_number(
     block_number: int,
     trace_db_session: Optional[orm.Session],
 ) -> Block:
-    block_timestamp, receipts, traces, base_fee_per_gas = await asyncio.gather(
+
+    block_timestamp, receipts, traces, base_fee_per_gas =  await asyncio.gather(
         _find_or_fetch_block_timestamp(w3, block_number, trace_db_session),
         _find_or_fetch_block_receipts(w3, block_number, trace_db_session),
         _find_or_fetch_block_traces(w3, block_number, trace_db_session),
         _find_or_fetch_base_fee_per_gas(w3, block_number, trace_db_session),
     )
+    # print( block_timestamp, receipts, traces, base_fee_per_gas)
     miner_address = await _find_or_fetch_miner_address(w3, block_number, traces)
-
+ 
     return Block(
         block_number=block_number,
         block_timestamp=block_timestamp,
@@ -53,6 +55,7 @@ async def _find_or_fetch_block_timestamp(
 ) -> int:
     if trace_db_session is not None:
         existing_block_timestamp = _find_block_timestamp(trace_db_session, block_number)
+  
         if existing_block_timestamp is not None:
             return existing_block_timestamp
 
@@ -101,12 +104,12 @@ async def _find_or_fetch_base_fee_per_gas(
 
 
 async def _fetch_block_timestamp(w3, block_number: int) -> int:
-    block_json = await w3.eth.get_block(block_number)
+    block_json =  await w3.eth.get_block(hex(block_number))
     return block_json["timestamp"]
 
 
 async def _fetch_block_receipts(w3, block_number: int) -> List[Receipt]:
-    receipts_json = await w3.eth.get_block_receipts(block_number)
+    receipts_json = await w3.eth.get_block_receipts(hex(block_number))
     return [Receipt(**receipt) for receipt in receipts_json]
 
 
@@ -192,7 +195,7 @@ async def _find_or_fetch_miner_address(
 
 
 async def _fetch_miner_eth2(w3, block_number: int) -> Optional[str]:
-    block_json = await w3.eth.get_block(block_number)
+    block_json = await w3.eth.get_block(hex(block_number))
     return block_json["miner"]
 
 

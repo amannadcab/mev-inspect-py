@@ -7,11 +7,12 @@ from typing import Optional
 from sqlalchemy import orm
 from web3 import Web3
 from web3.eth import AsyncEth
+from web3.middleware import async_geth_poa_middleware
 
 from mev_inspect.block import create_from_block_number
 from mev_inspect.classifiers.trace import TraceClassifier
 from mev_inspect.inspect_block import inspect_block, inspect_many_blocks
-from mev_inspect.methods import get_block_receipts, trace_block
+from mev_inspect.methods import get_block_receipts, trace_block 
 from mev_inspect.provider import get_base_provider
 
 logger = logging.getLogger(__name__)
@@ -32,7 +33,7 @@ class MEVInspector:
     ):
         base_provider = get_base_provider(rpc, request_timeout=request_timeout)
         self.w3 = Web3(base_provider, modules={"eth": (AsyncEth,)}, middlewares=[])
-
+        self.w3.middleware_onion.inject(async_geth_poa_middleware, layer=0)
         self.trace_classifier = TraceClassifier()
         self.max_concurrency = asyncio.Semaphore(max_concurrency)
 

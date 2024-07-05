@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import List
 
-from pycoingecko import CoinGeckoAPI
+from pycoingecko import CoinGeckoAPI 
 
 from mev_inspect.schemas.prices import COINGECKO_ID_BY_ADDRESS, TOKEN_ADDRESSES, Price
 
@@ -14,7 +14,7 @@ def fetch_prices() -> List[Price]:
         coingecko_price_data = coingecko_api.get_coin_market_chart_by_id(
             id=COINGECKO_ID_BY_ADDRESS[token_address],
             vs_currency="usd",
-            days="max",
+            days="365",
             interval="daily",
         )
         prices += _build_token_prices(coingecko_price_data, token_address)
