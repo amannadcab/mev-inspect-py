@@ -18,20 +18,15 @@ def upgrade():
     op.execute(
         """
         INSERT INTO tokens (token_address,decimals) VALUES
-        ('0x514910771af9ca656af840dff83e8264ecf986ca',18),
-        ('0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',18),
+        ('0x55d398326f99059fF775485246999027B3197955',18),
+        ('0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',18),
         ('0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',18),
-        ('0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e',18),
-        ('0x5d3a536e4d6dbd6114cc1ead35777bab948e3643',8),
-        ('0x2260fac5e5542a773aa44fbcfedf7c193bc2c599',8),
-        ('0x80fb784b7ed66730e8b1dbd9820afd29931aab03',18),
-        ('0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5',8),
-        ('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',6),
-        ('0xdac17f958d2ee523a2206206994597c13d831ec7',6),
-        ('0x6b175474e89094c44da98b954eedeac495271d0f',18),
-        ('0x0000000000085d4780b73119b644ae5ecd22b376',18),
-        ('0x39aa39c021dfbae8fac545936693ac917d5e7563',8),
-        ('0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9',18);
+        ('0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',18),
+        ('0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',18),
+        ('0x2170Ed0880ac9A755fd29B2688956BD959F933F8',18),
+        ('0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3',18),
+        ('0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',18),
+        ('0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',18);
         """
     )
 
