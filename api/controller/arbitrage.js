@@ -151,6 +151,8 @@ async function getSanwithcesTranscations() {
   const recentTransactions = await client.query(`
 SELECT
    s.*,
+   sd.profit_amount,
+   sd.profit_token_address,
    JSON_BUILD_OBJECT(
        'frontrun_swap_transaction_hash', sd.frontrun_swap_transaction_hash,
        'backrun_swap_transaction_hash', sd.backrun_swap_transaction_hash,
@@ -160,7 +162,11 @@ SELECT
    JSON_BUILD_OBJECT(
        'transfer_front_data', tf.*,
        'transfer_back_data', tb.*
-   ) AS trnsfrr
+   ) AS trnsfrr,
+  JSON_BUILD_OBJECT(
+       'miner_payments_front', mpf.*,
+       'miner_payments_back', mpb.*
+   ) AS minerpayments
 FROM
    swaps s
 LEFT JOIN
@@ -180,11 +186,30 @@ LEFT JOIN
    swaps sb
    ON sd.backrun_swap_transaction_hash = sb.transaction_hash
 LEFT JOIN 
-    miner_payments mp
-    ON a.transaction_hash = mp.transaction_hash  
+    miner_payments mpf
+    ON sd.frontrun_swap_transaction_hash = mpf.transaction_hash 
+LEFT JOIN 
+    miner_payments mpb
+    ON sd.backrun_swap_transaction_hash = mpb.transaction_hash  
 WHERE
-   sd.frontrun_swap_transaction_hash IS NOT NULL
-   OR sd.backrun_swap_transaction_hash IS NOT NULL
+   (sd.frontrun_swap_transaction_hash IS NOT NULL
+   OR sd.backrun_swap_transaction_hash IS NOT NULL)
+   AND sd.frontrun_swap_transaction_hash NOT IN (
+        SELECT 
+            transaction_hash 
+        FROM 
+            classified_traces 
+        WHERE 
+            error = 'Reverted'
+    )
+   AND sd.backrun_swap_transaction_hash NOT IN (
+        SELECT 
+            transaction_hash 
+        FROM 
+            classified_traces 
+        WHERE 
+            error = 'Reverted'
+    )
 LIMIT 10;
 
 
