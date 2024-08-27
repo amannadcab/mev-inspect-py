@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { getDailyTransaction , getRecentTranscations, getSanwithcesTranscations} = require("./controller/arbitrage");
+const { getDailyTransaction , getRecentTranscations} = require("./controller/arbitrage");
 
 const app = express();
 app.use(cors({ origin: "*" }));
@@ -29,17 +29,6 @@ app.get("/api/recents", async (req, res) => {
   }
 });
 
-app.get("/api/sandwitches_record", async (req, res) => {
-  try {
-    const data = await getSanwithcesTranscations();
-    console.log(data)
-    return res.status(200).send({ status: true, data: data });
-
-  } catch (error) {
-    console.log(error);
-    return res.status(400).send({ status: false, data: [] });
-  }
-});
 
 // Start the server
 const PORT = process.env.PORT || 3000;
