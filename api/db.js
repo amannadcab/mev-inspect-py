@@ -17,10 +17,10 @@ const pool = new Pool({
 //   ch.logger('Unexpected error on idle pool client', err);
 // });
 
-pool.connect((err) => {
-  if (err) {
-    ch.logger('Error while logging into DataBase', err.stack);
-  }
-});
+// pool.connect((err) => {
+//   if (err) {
+//     ch.logger('Error while logging into DataBase', err.stack);
+//   }
+// });
 
 module.exports = pool;
