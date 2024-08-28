@@ -28,7 +28,7 @@ async function getDailyTransaction() {
         (prices[row.profit_token_address] * Number(row.total_profit_amount)) /
         10 ** Number(row.decimals);
     });
-
+    client.release()
     return {
       totalArbitrageUsd: arbSum,
       totalSandwichUsd: sandSum,
@@ -95,8 +95,7 @@ GROUP BY
 LIMIT 10;
 
   `);
-
-
+ 
   const sandwichedTransaction = await client.query(`
   SELECT
      s.*,
@@ -276,6 +275,7 @@ GROUP BY
     const client = await pool.connect();
     const result = await client.query(query); // Execute the query
     const arbData = result.rows;
+      "SELECT * FROM  sandwiches ORDER BY profit_amount DESC LIMIT 5;"
     const querySand=`
       SELECT
      s.*,
