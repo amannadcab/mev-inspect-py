@@ -1,47 +1,5 @@
 const pool = require("../db");
 let prices;
-async function getArbitrage(page = 1, limit = 10) {
-  const offset = (page - 1) * limit;
-
-  try {
-    // Get the total count of items
-    const client = await pool.connect();
-    const totalItemsResult = await client.query(
-      "SELECT COUNT(*) FROM arbitrages"
-    );
-
-    const totalItems = parseInt(totalItemsResult.rows[0].count);
-
-    // Get the paginated items
-    const itemsResult = await client.query(
-      "SELECT * FROM arbitrages LIMIT $1 OFFSET $2",
-      [limit, offset]
-    );
-    client.release();
-    const items = itemsResult.rows;
-
-    // Calculate total pages
-    const totalPages = Math.ceil(totalItems / limit);
-
-    return {
-      total: totalItems,
-      pages: totalPages,
-      page: page,
-      per_page: limit,
-      has_next: page < totalPages,
-      has_prev: page > 1,
-      items: items,
-    };
-  } catch (e) {
-    console.log("Error:", e);
-    return;
-  }
-}
-
-async function getArbitrageSummary(tx_Hash) {
-  try {
-  } catch (e) {}
-}
 
 async function getDailyTransaction() {
   try {
@@ -243,11 +201,9 @@ async function loadPrice() {
 }
 
 loadPrice();
-setInterval(loadPrice,600000);
+// setInterval(loadPrice,600000);
 
 module.exports = {
-  getArbitrage,
-  getArbitrageSummary,
   getDailyTransaction,
   getRecentTranscations
 };

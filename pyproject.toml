@@ -29,7 +29,7 @@ pytest-cov = "^2.12.1"
 coverage = "^5.5"
 alembic = "^1.6.5"
 CProfileV = "^1.0.7"
-regex = "^2021.10.8"
+regex = "2022.3.15"
 pytest-profiling = "^1.7.0"
 sqlalchemy = "^1.4.23"
 

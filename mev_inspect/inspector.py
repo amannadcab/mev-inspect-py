@@ -5,7 +5,7 @@ from asyncio import CancelledError
 from typing import Optional
 
 from sqlalchemy import orm
-from web3 import Web3
+from web3 import Web3,__version__
 from web3.eth import AsyncEth
 from web3.middleware import async_geth_poa_middleware
 
@@ -17,6 +17,7 @@ from mev_inspect.provider import get_base_provider
 
 logger = logging.getLogger(__name__)
 
+print(__version__)
 
 # add missing parity methods
 # this is a bit gross
