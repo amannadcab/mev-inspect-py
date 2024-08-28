@@ -3,13 +3,16 @@ let prices;
 
 async function getDailyTransaction() {
   try {
+    console.log("connect to db");
     const client = await pool.connect();
+    console.log("request to db");
     const arbitrageUsd = await client.query(
       "SELECT a.profit_token_address, t.decimals, SUM(a.profit_amount) AS total_profit_amount FROM arbitrages a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address) LEFT JOIN  classified_traces ct ON a.transaction_hash = ct.transaction_hash AND ct.error != 'Reverted' GROUP BY a.profit_token_address ,t.decimals;"
     );
     const sandwichUsd = await client.query(
       "SELECT s.profit_token_address, t.decimals, SUM(s.profit_amount) AS total_profit_amount FROM sandwiches s JOIN tokens t ON  LOWER(s.profit_token_address) = LOWER(t.token_address) LEFT JOIN classified_traces ct_back ON s.backrun_swap_transaction_hash = ct_back.transaction_hash AND ct_back.error != 'Reverted' LEFT JOIN  classified_traces ct_front ON s.frontrun_swap_transaction_hash = ct_front.transaction_hash AND ct_front.error != 'Reverted' GROUP BY s.profit_token_address ,t.decimals;"
     );
+    console.log("response from  db");
     arbSum = 0;
     arbitrageUsd.rows.forEach((row) => {
       arbSum +=
@@ -37,7 +40,14 @@ async function getDailyTransaction() {
 }
 
 async function getRecentTranscations() {
-  const client = await pool.connect();
+  const client = await pool.connect(err => {
+    console.log("RECONNECTING ATTEMPT")
+    if (err) {
+      console.error('connection error', err.stack)
+    } else {
+      console.log('connected')
+    }
+  });
 
   const recentTransactions = await client.query(`
 SELECT 
@@ -88,7 +98,7 @@ GROUP BY
     mp.transaction_to_address     
 LIMIT 10;
 
-`);
+  `);
 
   const sandwichedTransaction = await client.query(`
   SELECT
@@ -188,9 +198,10 @@ LIMIT 10;
     obj.type ="Sandwich"
     return obj;
   });
- let result= [...sandwichtxs,...arbtxs].sort((a,b)=>Number(b.block_number)-Number(a.block_number))
 
+  let result= [...sandwichtxs,...arbtxs].sort((a,b)=>Number(b.block_number)-Number(a.block_number))
   client.release();
+  await client.end();
   return result;
 }
 

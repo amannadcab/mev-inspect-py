@@ -13,9 +13,9 @@ const pool = new Pool({
   port: 5432,
 });
 
-pool.on('error', (err) => {
-  ch.logger('Unexpected error on idle pool client', err);
-});
+// pool.on('error', (err) => {
+//   ch.logger('Unexpected error on idle pool client', err);
+// });
 
 pool.connect((err) => {
   if (err) {

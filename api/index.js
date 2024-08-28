@@ -20,7 +20,6 @@ app.get("/api/stats", async (_, res) => {
 app.get("/api/recents", async (req, res) => {
   try {
     const data = await getRecentTranscations();
-    console.log(data)
     return res.status(200).send({ status: true, data: data });
 
   } catch (error) {
