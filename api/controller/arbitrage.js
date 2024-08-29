@@ -8,11 +8,11 @@ async function getDailyTransaction() {
     const client = await pool.connect();
 
     const arbitrageUsd = await client.query(
-      "SELECT a.profit_token_address, t.decimals, SUM(a.profit_amount) AS total_profit_amount FROM arbitrages a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address) LEFT JOIN  classified_traces ct ON a.transaction_hash = ct.transaction_hash AND ct.error = 'Reverted' GROUP BY a.profit_token_address ,t.decimals;"
+      "SELECT a.profit_token_address, t.decimals, SUM(a.profit_amount) AS total_profit_amount FROM  arbitrages a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address)  WHERE  a.profit_amount > 0 GROUP BY a.profit_token_address, t.decimals;"
     );
   
     const sandwichUsd = await client.query(
-      "SELECT s.profit_token_address, t.decimals, SUM(s.profit_amount) AS total_profit_amount FROM sandwiches s JOIN tokens t ON  LOWER(s.profit_token_address) = LOWER(t.token_address) LEFT JOIN classified_traces ct_back ON s.backrun_swap_transaction_hash = ct_back.transaction_hash AND ct_back.error = 'Reverted' LEFT JOIN  classified_traces ct_front ON s.frontrun_swap_transaction_hash = ct_front.transaction_hash AND ct_front.error = 'Reverted' GROUP BY s.profit_token_address ,t.decimals;"
+      "SELECT s.profit_token_address, t.decimals, SUM(s.profit_amount) AS total_profit_amount FROM sandwiches s JOIN tokens t ON  LOWER(s.profit_token_address) = LOWER(t.token_address) WHERE  s.profit_amount > 0  GROUP BY s.profit_token_address ,t.decimals;"
     );
 
     arbSum = 0;
@@ -209,6 +209,7 @@ LIMIT 10;
   let result = [...sandwichtxs, ...arbtxs].sort(
     (a, b) => Number(b.block_number) - Number(a.block_number)
   );
+
   return result;
 } catch(e) {
   console.log("Error:",e);
