@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-const { getDailyTransaction , getRecentTranscations, getTopFiveRecord} = require("./controller/arbitrage");
+const { getDailyTransaction , getRecentTranscations} = require("./controller/arbitrage");
 
 const app = express();
 app.use(cors({ origin: "*" }));
@@ -28,7 +28,7 @@ app.get("/api/recents", async (req, res) => {
   }
 });
 
-app.get("/api/topFiveRecord",getTopFiveRecord)
+
 
 
 // Start the server
