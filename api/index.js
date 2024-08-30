@@ -109,10 +109,10 @@ async function socketTopTranscations() {
     clock = 1;
     await socketRecentTransaction();
     await socketStats();
-    // await socketTopTranscations();
+    await socketTopTranscations();
     clock = 0;
   }
-}, 3000);
+}, 10000);
 
 const PORT = process.env.PORT || 3000;
 
