@@ -84,7 +84,7 @@ async function socketRecentTransaction() {
   const data = await getRecentTranscations();
   if(data?.arbitrageBlock > recentD?.arbitrageBlock || !recentD) {
     recentD = data;
-    io.emit("recent", JSON.stringify({ status: true, data: recentD.result }));
+    io.emit("recent", JSON.stringify({ status: true, data: recentD?.result }));
   }
 }
 
