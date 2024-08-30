@@ -487,6 +487,7 @@ async function loadPrice() {
   prices = await fetch("https://api.sushi.com/price/v1/56").then((d) =>
     d.json()
   );
+  console.log("prices:",prices);
 }
 
 
