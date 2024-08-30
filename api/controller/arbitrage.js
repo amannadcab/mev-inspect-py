@@ -380,7 +380,12 @@ LIMIT 100;
       obj.contract_address = d.transaction_to_address;
       obj.transaction_hash = d.transaction_hash;
       obj.protocols = d.protocols;
-      obj.transfers = d.transfrs.map((d) => d.token_address);
+      obj.transfers = d.transfrs.map((d) => d.token_address).filter(
+        (value, index, self) =>
+          self.findIndex(
+            (obj) => JSON.stringify(obj) === JSON.stringify(value)
+          ) === index
+      );
       obj.block_number = d.block_number;
       obj.profit_token_address = d.profit_token_address;
       obj.gas_cost = ((d.gas_used * d.gas_price) / 1e18) * prices[wbnb];
