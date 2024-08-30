@@ -111,11 +111,12 @@ server.listen(4000, () => {
   console.log("Socket.io server listening on Port 4000");
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}`);
   setInterval(async () => {
     if (clock == 0) {
       clock = 1;
+      await loadPrice();
       await socketRecentTransaction();
       await socketStats();
       await socketTopTranscations();
