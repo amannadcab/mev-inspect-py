@@ -104,15 +104,6 @@ async function socketTopTranscations() {
   }
 }
 
- setInterval(async () => {
-  if (clock == 0) {
-    clock = 1;
-    await socketRecentTransaction();
-    await socketStats();
-    await socketTopTranscations();
-    clock = 0;
-  }
-}, 10000);
 
 const PORT = process.env.PORT || 3000;
 
@@ -122,4 +113,13 @@ server.listen(4000, () => {
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  // setInterval(async () => {
+  //   if (clock == 0) {
+  //     clock = 1;
+  //     await socketRecentTransaction();
+  //     await socketStats();
+  //     await socketTopTranscations();
+  //     clock = 0;
+  //   }
+  // }, 10000);
 });
