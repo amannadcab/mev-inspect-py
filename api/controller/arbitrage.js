@@ -1,5 +1,6 @@
 const { types } = require("pg");
 const pool = require("../db");
+
 let prices;
 
 async function getDailyTransaction() {
@@ -91,6 +92,8 @@ GROUP BY
     mev.base_fee_per_gas,
     mp.transaction_from_address,  
     mp.transaction_to_address     
+ORDER BY 
+    a.block_number DESC
 LIMIT 10;
 
   `);
@@ -248,7 +251,7 @@ LIMIT 100;
       (a, b) => Number(b.block_number) - Number(a.block_number)
     );
 
-    return result;
+    return {result:result,arbitrageBlock:arbtxs[0].block_number,sandwichBlock:sandwichtxs[0].block_number};
   } catch (e) {
     console.log("Error:", e);
   } finally {
@@ -257,7 +260,6 @@ LIMIT 100;
     }
   }
 }
-
 
 async function getTopTranscations() {
   const client = await pool.connect();
@@ -470,9 +472,10 @@ LIMIT 100;
     let arbTx = arbtxs.sort(
       (a, b) => Number(b.profit_usd) - Number(a.profit_usd)
     );
-    return {sandwich:sandwichTx.slice(0,5),arbitrage:arbTx.slice(0,5)};
+    return {sandwich:sandwichTx.slice(0,5), arbitrage:arbTx.slice(0,5)};
   } catch (e) {
     console.log("Error:", e);
+    return {sandwich:[], arbitrage:[]};
   } finally {
     if (client) {
       client.release(); // Release the client back to the pool
@@ -487,10 +490,11 @@ async function loadPrice() {
 }
 
 
-loadPrice();
+setInterval(loadPrice,400000);
 
 module.exports = {
   getDailyTransaction,
   getRecentTranscations,
-  getTopTranscations
+  getTopTranscations,
+  loadPrice
 };
