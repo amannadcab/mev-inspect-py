@@ -16,6 +16,7 @@ app.use(express.json());
 const server = http.createServer(app);
 
 const io = new Server(server, {
+  path:"/ws",
   cors: {
     origin: "*",
     methods: ["GET"],
