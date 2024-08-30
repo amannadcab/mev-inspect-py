@@ -25,7 +25,7 @@ const io = new Server(server, {
 
 io.on("connection", async(socket) => {
   await loadPrice();
-  // console.log("A user connected", socket.id);
+  console.log("A user connected", socket.id);
   socket.emit("connected");
 
   const statsdata = await getDailyTransaction();
@@ -113,13 +113,13 @@ server.listen(4000, () => {
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  // setInterval(async () => {
-  //   if (clock == 0) {
-  //     clock = 1;
-  //     await socketRecentTransaction();
-  //     await socketStats();
-  //     await socketTopTranscations();
-  //     clock = 0;
-  //   }
-  // }, 10000);
+  setInterval(async () => {
+    if (clock == 0) {
+      clock = 1;
+      await socketRecentTransaction();
+      await socketStats();
+      await socketTopTranscations();
+      clock = 0;
+    }
+  }, 10000);
 });
