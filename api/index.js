@@ -26,7 +26,7 @@ const io = new Server(server, {
 
 io.on("connection", async(socket) => {
   await loadPrice();
-  console.log("A user connected", socket.id);
+  // console.log("A user connected", socket.id);
   socket.emit("connected");
 
   const statsdata = await getDailyTransaction();
@@ -48,9 +48,12 @@ io.on("connection", async(socket) => {
   });
 });
 
-app.get("/api/stats", async (_, res) => {
+app.get("/api/stats", async (req, res) => {
+  day = req.query.filter;
+  // console.log("day:",day)
+  if(!day) day = 1; 
   try {
-    const data = await getDailyTransaction();
+    const data = await getDailyTransaction(day);
     res.status(200).send({ status: true, data: data });
   } catch (error) {
     res.status(400).send({ status: false, data: [] });
@@ -104,7 +107,6 @@ async function socketTopTranscations() {
     io.emit("top", JSON.stringify({ status: true, data: topD }));
   }
 }
-
 
 const PORT = process.env.PORT || 3000;
 

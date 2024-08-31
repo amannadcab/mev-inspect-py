@@ -3,16 +3,16 @@ const pool = require("../db");
 
 let prices;
 
-async function getDailyTransaction() {
+async function getDailyTransaction(day = 1) {
   try {
     const client = await pool.connect();
-
+    if(!prices) { await loadPrice()}
     const arbitrageUsd = await client.query(
-      "SELECT a.profit_token_address, t.decimals, SUM(a.profit_amount) AS total_profit_amount FROM  arbitrages a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address)  WHERE  a.profit_amount > 0 GROUP BY a.profit_token_address, t.decimals;"
+      `SELECT a.profit_token_address, t.decimals, SUM(a.profit_amount) AS total_profit_amount FROM  arbitrages a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address)  WHERE  a.profit_amount > 0 AND a.created_at >= NOW() - INTERVAL '${day} day' GROUP BY a.profit_token_address, t.decimals;`
     );
 
     const sandwichUsd = await client.query(
-      "SELECT s.profit_token_address, t.decimals, SUM(s.profit_amount) AS total_profit_amount FROM sandwiches s JOIN tokens t ON  LOWER(s.profit_token_address) = LOWER(t.token_address) WHERE  s.profit_amount > 0  GROUP BY s.profit_token_address ,t.decimals;"
+      `SELECT s.profit_token_address, t.decimals, SUM(s.profit_amount) AS total_profit_amount FROM sandwiches s JOIN tokens t ON  LOWER(s.profit_token_address) = LOWER(t.token_address) WHERE  s.profit_amount > 0 AND s.created_at >= NOW() - INTERVAL '${day} day' GROUP BY s.profit_token_address ,t.decimals;`
     );
 
     arbSum = 0;
@@ -45,6 +45,7 @@ async function getDailyTransaction() {
 async function getRecentTranscations() {
   const client = await pool.connect();
   try {
+    if(!prices) { await loadPrice()}
     const recentTransactions = await client.query(`
 SELECT 
     a.*,
@@ -155,6 +156,22 @@ LEFT JOIN
 LEFT JOIN 
     swap_details sd_front 
     ON s.frontrun_swap_transaction_hash = sd_front.transaction_hash
+WHERE 
+    s.backrun_swap_transaction_hash NOT IN (
+        SELECT 
+            transaction_hash 
+        FROM 
+            classified_traces 
+        WHERE 
+            error = 'Reverted'
+    ) AND  s.frontrun_swap_transaction_hash NOT IN (
+        SELECT 
+            transaction_hash 
+        FROM 
+            classified_traces 
+        WHERE 
+            error = 'Reverted'
+    )
 ORDER BY 
     s.block_number DESC
 LIMIT 100;
@@ -264,6 +281,7 @@ LIMIT 100;
 async function getTopTranscations() {
   const client = await pool.connect();
   try {
+    if(!prices) { await loadPrice()}
     const recentTransactions = await client.query(`
 SELECT 
     a.*,
@@ -374,6 +392,22 @@ LEFT JOIN
 LEFT JOIN 
     swap_details sd_front 
     ON s.frontrun_swap_transaction_hash = sd_front.transaction_hash
+WHERE 
+    s.backrun_swap_transaction_hash NOT IN (
+        SELECT 
+            transaction_hash 
+        FROM 
+            classified_traces 
+        WHERE 
+            error = 'Reverted'
+    ) AND  s.frontrun_swap_transaction_hash NOT IN (
+        SELECT 
+            transaction_hash 
+        FROM 
+            classified_traces 
+        WHERE 
+            error = 'Reverted'
+    )
 ORDER BY
     s.profit_amount DESC
 LIMIT 100;
