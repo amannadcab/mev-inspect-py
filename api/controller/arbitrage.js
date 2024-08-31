@@ -6,7 +6,9 @@ let prices;
 async function getDailyTransaction(day = 1) {
   try {
     const client = await pool.connect();
-    if(!prices) { await loadPrice()}
+    if (!prices) {
+      await loadPrice();
+    }
     const arbitrageUsd = await client.query(
       `SELECT a.profit_token_address, t.decimals, SUM(a.profit_amount) AS total_profit_amount FROM  arbitrages a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address)  WHERE  a.profit_amount > 0 AND a.created_at >= NOW() - INTERVAL '${day} day' GROUP BY a.profit_token_address, t.decimals;`
     );
@@ -45,7 +47,9 @@ async function getDailyTransaction(day = 1) {
 async function getRecentTranscations() {
   const client = await pool.connect();
   try {
-    if(!prices) { await loadPrice()}
+    if (!prices) {
+      await loadPrice();
+    }
     const recentTransactions = await client.query(`
 SELECT 
     a.*,
@@ -123,6 +127,7 @@ SELECT DISTINCT
     s.backrun_swap_transaction_hash, 
     s.frontrun_swap_transaction_hash, 
     s.block_number, 
+    s.created_at,
     sd_back.protocol AS backrun_protocol,
     sd_back.token_in_address AS backrun_token_in_address,
     sd_back.token_out_address AS backrun_token_out_address,
@@ -181,16 +186,19 @@ LIMIT 100;
 
     arbtxs = recentTransactions.rows.map((d) => {
       let obj = {};
+      obj.created_at = d.created_at;
       obj.from = d.transaction_from_address;
       obj.contract_address = d.transaction_to_address;
       obj.transaction_hash = d.transaction_hash;
       obj.protocols = d.protocols;
-      obj.transfers = d.transfrs.map((d) => d.token_address).filter(
-        (value, index, self) =>
-          self.findIndex(
-            (obj) => JSON.stringify(obj) === JSON.stringify(value)
-          ) === index
-      );
+      obj.transfers = d.transfrs
+        .map((d) => d.token_address)
+        .filter(
+          (value, index, self) =>
+            self.findIndex(
+              (obj) => JSON.stringify(obj) === JSON.stringify(value)
+            ) === index
+        );
       obj.block_number = d.block_number;
       obj.profit_token_address = d.profit_token_address;
       obj.gas_cost = ((d.gas_used * d.gas_price) / 1e18) * prices[wbnb];
@@ -241,6 +249,7 @@ LIMIT 100;
 
     sandwichtxs = Object.values(filterData).map((d) => {
       let obj = {};
+      obj.created_at = d.created_at;
       obj.from = d.transaction_from_address;
       obj.contract_address = d.transaction_to_address;
       obj.transaction_hash = d.backrun_swap_transaction_hash;
@@ -268,7 +277,11 @@ LIMIT 100;
       (a, b) => Number(b.block_number) - Number(a.block_number)
     );
 
-    return {result:result,arbitrageBlock:arbtxs[0].block_number,sandwichBlock:sandwichtxs[0].block_number};
+    return {
+      result: result,
+      arbitrageBlock: arbtxs[0]?.block_number,
+      sandwichBlock: sandwichtxs[0]?.block_number,
+    };
   } catch (e) {
     console.log("Error:", e);
   } finally {
@@ -281,7 +294,9 @@ LIMIT 100;
 async function getTopTranscations() {
   const client = await pool.connect();
   try {
-    if(!prices) { await loadPrice()}
+    if (!prices) {
+      await loadPrice();
+    }
     const recentTransactions = await client.query(`
 SELECT 
     a.*,
@@ -421,12 +436,14 @@ LIMIT 100;
       obj.contract_address = d.transaction_to_address;
       obj.transaction_hash = d.transaction_hash;
       obj.protocols = d.protocols;
-      obj.transfers = d.transfrs.map((d) => d.token_address).filter(
-        (value, index, self) =>
-          self.findIndex(
-            (obj) => JSON.stringify(obj) === JSON.stringify(value)
-          ) === index
-      );
+      obj.transfers = d.transfrs
+        .map((d) => d.token_address)
+        .filter(
+          (value, index, self) =>
+            self.findIndex(
+              (obj) => JSON.stringify(obj) === JSON.stringify(value)
+            ) === index
+        );
       obj.block_number = d.block_number;
       obj.profit_token_address = d.profit_token_address;
       obj.gas_cost = ((d.gas_used * d.gas_price) / 1e18) * prices[wbnb];
@@ -506,10 +523,10 @@ LIMIT 100;
     let arbTx = arbtxs.sort(
       (a, b) => Number(b.profit_usd) - Number(a.profit_usd)
     );
-    return {sandwich:sandwichTx.slice(0,5), arbitrage:arbTx.slice(0,5)};
+    return { sandwich: sandwichTx.slice(0, 5), arbitrage: arbTx.slice(0, 5) };
   } catch (e) {
     console.log("Error:", e);
-    return {sandwich:[], arbitrage:[]};
+    return { sandwich: [], arbitrage: [] };
   } finally {
     if (client) {
       client.release(); // Release the client back to the pool
@@ -523,12 +540,11 @@ async function loadPrice() {
   );
 }
 
-
-setInterval(loadPrice,400000);
+setInterval(loadPrice, 400000);
 
 module.exports = {
   getDailyTransaction,
   getRecentTranscations,
   getTopTranscations,
-  loadPrice
+  loadPrice,
 };
