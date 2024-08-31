@@ -221,6 +221,7 @@ LIMIT 100;
         );
       } else {
         let obj = {
+          created_at: d.created_at,
           sandwicher_address: d.sandwicher_address,
           profit_amount: d.profit_amount,
           profit_token_address: d.profit_token_address,
