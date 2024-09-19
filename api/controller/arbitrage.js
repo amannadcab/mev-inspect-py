@@ -751,13 +751,21 @@ async function getTopTranscations() {
       return obj;
     });
 
-    let sandwichTx = sandwichtxs.sort(
-      (a, b) => Number(b.profit_usd) - Number(a.profit_usd)
+    // let sandwichTx = sandwichtxs.sort(
+    //   (a, b) => Number(b.profit_usd) - Number(a.profit_usd)
+    // );
+    // let arbTx = arbtxs.sort(
+    //   (a, b) => Number(b.profit_usd) - Number(a.profit_usd)
+    // );
+    let result = [...sandwichtxs, ...arbtxs].sort(
+      (a, b) => Number(b.block_number) - Number(a.block_number)
     );
-    let arbTx = arbtxs.sort(
-      (a, b) => Number(b.profit_usd) - Number(a.profit_usd)
-    );
-    return { sandwich: sandwichTx.slice(0, 5), arbitrage: arbTx.slice(0, 5) };
+    return {
+      result: result,
+      arbitrageBlock: arbtxs[0]?.block_number,
+      sandwichBlock: sandwichtxs[0]?.block_number,
+    };
+    // return { sandwich: sandwichTx.slice(0, 5), arbitrage: arbTx.slice(0, 5) };
   } catch (e) {
     console.log("Error:", e);
     return { sandwich: [], arbitrage: [] };

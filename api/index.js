@@ -75,7 +75,7 @@ app.get("/api/top", async (req, res) => {
     const data = await getTopTranscations();
     return res.status(200).send({ status: true, data: data });
   } catch (e) {
-    console.log(error);
+    console.log(e);
     return res.status(400).send({ status: false, data: [] });
   }
 });
@@ -86,7 +86,7 @@ let statsD,recentD,topD;
 
 async function socketRecentTransaction() {
   const data = await getRecentTranscations();
-  if(data?.arbitrageBlock > recentD?.arbitrageBlock || !recentD) {
+  if(data?.arbitrageBlock > recentD?.arbitrageBlock || (Number(data?.sandwichBlock) >  Number(recentD?.sandwichBlock))|| !recentD) {
     recentD = data;
     io.emit("recent", JSON.stringify({ status: true, data: recentD?.result }));
   }
@@ -102,7 +102,7 @@ async function socketStats() {
 
 async function socketTopTranscations() {
   const data = await getTopTranscations();
-  if((data.arbitrage.length>0 && Number(data.arbitrage[0]?.block_number) >  Number(topD?.arbitrage[0]?.block_number))|| (data.sandwich.length>0 && Number(data.sandwich[0]?.block_number) >  Number(topD?.sandwich[0]?.block_number)) || !topD) {
+  if(( Number(data?.arbitrageBlock) >  Number(topD?.arbitrageBlock))|| (Number(data?.sandwichBlock) >  Number(topD?.sandwichBlock)) || !topD) {
     topD = data;
     io.emit("top", JSON.stringify({ status: true, data: topD }));
   }
