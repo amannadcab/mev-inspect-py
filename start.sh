@@ -1,7 +1,7 @@
 #!/bin/sh
-export POSTGRES_USER=postgres
-export POSTGRES_PASSWORD=postgres
-export POSTGRES_HOST=localhost
+export POSTGRES_USER=mevowner
+export POSTGRES_PASSWORD=SRTrDKSqeH
+export POSTGRES_HOST=64.227.129.194
 export REDIS_USER=
 export REDIS_HOST=localhost
 export REDIS_PASSWORD=

@@ -2,10 +2,10 @@ const { Pool } = require("pg");
 
 // Create a PostgreSQL pool connection
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
+  user: "mevowner",
+  host: "64.227.129.194",
   database: "mev_inspect",
-  password: "postgres",
+  password: "SRTrDKSqeH",
   max: 150,
   keepAlive: true,
   idleTimeoutMillis: 60000, 
