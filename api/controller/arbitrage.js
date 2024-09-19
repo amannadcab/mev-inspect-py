@@ -8,11 +8,11 @@ async function getDailyTransaction(day = 1) {
     const client = await pool.connect();
 
     const arbitrageUsd = await client.query(
-      `SELECT a.profit_token_address, t.decimals, SUM(a.profit_usd) AS total_profit_amount FROM  arbitrages_view a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address)  WHERE  a.profit_amount > 0 AND a.created_at >= NOW() - INTERVAL '${day} day' GROUP BY a.profit_token_address, t.decimals;`
+      `SELECT a.profit_token_address, t.decimals, SUM(a.profit_usd) AS total_profit_amount FROM  arbitrages_view a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address)  WHERE  a.profit_usd > 0 AND a.profit_usd < 2000000000000000000 AND a.created_at >= NOW() - INTERVAL '${day} day' GROUP BY a.profit_token_address, t.decimals;`
     );
 
     const sandwichUsd = await client.query(
-      `SELECT s.profit_token_address, t.decimals, SUM(s.profit_usd) AS total_profit_amount FROM sandwiched_view s JOIN tokens t ON  LOWER(s.profit_token_address) = LOWER(t.token_address) WHERE  s.profit_amount > 0 AND s.created_at >= NOW() - INTERVAL '${day} day' GROUP BY s.profit_token_address ,t.decimals;`
+      `SELECT s.profit_token_address, t.decimals, SUM(s.profit_usd) AS total_profit_amount FROM sandwiched_view s JOIN tokens t ON  LOWER(s.profit_token_address) = LOWER(t.token_address) WHERE  s.profit_amount > 0 AND s.profit_usd < 2000000000000000000 AND s.created_at >= NOW() - INTERVAL '${day} day' GROUP BY s.profit_token_address ,t.decimals;`
     );
 
     arbSum = 0;
@@ -538,11 +538,11 @@ async function getRecentTranscations() {
   const client = await pool.connect();
   try {
     const recentTransactions = await client.query(
-      `SELECT * FROM  arbitrages_view av WHERE av.transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') ORDER BY av.block_number DESC LIMIT 10;`
+      `SELECT * FROM  arbitrages_view av WHERE  av.profit_usd < 2000000000000000000 AND av.transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') ORDER BY av.block_number DESC LIMIT 10;`
     );
 
     const sandwichedTransaction = await client.query(
-      `SELECT * FROM sandwiched_view sv WHERE sv.frontrun_transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') AND  sv.backrun_transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') ORDER BY sv.block_number DESC LIMIT 10;`
+      `SELECT * FROM sandwiched_view sv WHERE sv.profit_usd < 2000000000000000000 AND sv.frontrun_transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') AND  sv.backrun_transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') ORDER BY sv.block_number DESC LIMIT 10;`
     );
 
     arbtxs = recentTransactions.rows.map((d) => {
@@ -655,11 +655,11 @@ async function getTopTranscations() {
   const client = await pool.connect();
   try {
     const recentTransactions = await client.query(
-      `SELECT * FROM  arbitrages_view av WHERE av.transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') ORDER BY av.profit_usd DESC LIMIT 10;`
+      `SELECT * FROM  arbitrages_view av WHERE av.profit_usd < 2000000000000000000 AND av.transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') ORDER BY av.profit_usd DESC LIMIT 10;`
     );
 
     const sandwichedTransaction = await client.query(
-      `SELECT * FROM sandwiched_view sv WHERE sv.frontrun_transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') AND  sv.backrun_transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') ORDER BY sv.block_number DESC LIMIT 10;`
+      `SELECT * FROM sandwiched_view sv WHERE sv.profit_usd < 2000000000000000000 AND sv.frontrun_transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') AND  sv.backrun_transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') ORDER BY sv.block_number DESC LIMIT 10;`
     );
 
     arbtxs = recentTransactions.rows.map((d) => {
