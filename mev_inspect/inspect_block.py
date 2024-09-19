@@ -7,7 +7,7 @@ from web3 import Web3
 from mev_inspect.arbitrages import get_arbitrages
 from mev_inspect.block import create_from_block_number
 from mev_inspect.classifiers.trace import TraceClassifier
-from mev_inspect.crud.arbitrages import delete_arbitrages_for_blocks, write_arbitrages
+from mev_inspect.crud.arbitrages import delete_arbitrages_for_blocks, write_arbitrages,write_arbitrage_view
 from mev_inspect.crud.blocks import delete_blocks, write_blocks
 from mev_inspect.crud.liquidations import (
     delete_liquidations_for_blocks,
@@ -26,7 +26,7 @@ from mev_inspect.crud.punks import (
     write_punk_bids,
     write_punk_snipes,
 )
-from mev_inspect.crud.sandwiches import delete_sandwiches_for_blocks, write_sandwiches
+from mev_inspect.crud.sandwiches import delete_sandwiches_for_blocks, write_sandwiches, write_sandwichs_view
 from mev_inspect.crud.summary import update_summary_for_block_range
 from mev_inspect.crud.swaps import delete_swaps_for_blocks, write_swaps
 from mev_inspect.crud.traces import (
@@ -122,7 +122,7 @@ async def inspect_many_blocks(
         )
   
         classified_traces = trace_classifier.classify(block.traces)
-        # print(classified_traces)
+      
         logger.info(
             f"Block: {block_number} -- Returned {len(classified_traces)} classified traces"
         )
@@ -201,6 +201,7 @@ async def inspect_many_blocks(
     delete_sandwiches_for_blocks(
         inspect_db_session, after_block_number, before_block_number
     )
+    write_sandwichs_view(inspect_db_session,all_sandwiches,all_miner_payments,all_transfers,all_classified_traces)
     write_sandwiches(inspect_db_session, all_sandwiches)
 
     delete_punk_bids_for_blocks(
@@ -227,7 +228,7 @@ async def inspect_many_blocks(
         inspect_db_session, after_block_number, before_block_number
     )
     write_miner_payments(inspect_db_session, all_miner_payments)
-
+    write_arbitrage_view(inspect_db_session,all_arbitrages,all_miner_payments,all_transfers,all_classified_traces)
     update_summary_for_block_range(
         inspect_db_session,
         after_block_number,

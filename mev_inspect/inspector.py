@@ -17,7 +17,6 @@ from mev_inspect.provider import get_base_provider
 
 logger = logging.getLogger(__name__)
 
-print(__version__)
 
 # add missing parity methods
 # this is a bit gross
