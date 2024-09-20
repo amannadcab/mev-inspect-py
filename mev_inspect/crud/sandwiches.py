@@ -167,12 +167,12 @@ def write_sandwichs_view(
         front_matching_payment = miners_payments_dict.get(sandwich.frontrun_swap.transaction_hash)
         back_matching_payment = miners_payments_dict.get(sandwich.backrun_swap.transaction_hash)
         profit_token_address = sandwich.profit_token_address
+        price = get_cached_price(hours=2)
         if price[profit_token_address]:
             profit_amount = sandwich.profit_amount
             transaction_to_address = front_matching_payment.transaction_to_address
             transaction_from_address= front_matching_payment.transaction_from_address
             coinbase_transfer = front_matching_payment.coinbase_transfer + back_matching_payment.coinbase_transfer
-            price = get_cached_price(hours=2)
             cost = (front_matching_payment.gas_price*front_matching_payment.gas_used) + (back_matching_payment.gas_price*back_matching_payment.gas_used) + coinbase_transfer
             cost_usd = cost * price['0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c']
             profit_usd = profit_amount * price[profit_token_address]
