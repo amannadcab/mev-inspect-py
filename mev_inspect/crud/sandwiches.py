@@ -167,32 +167,34 @@ def write_sandwichs_view(
         front_matching_payment = miners_payments_dict.get(sandwich.frontrun_swap.transaction_hash)
         back_matching_payment = miners_payments_dict.get(sandwich.backrun_swap.transaction_hash)
         profit_token_address = sandwich.profit_token_address
-        profit_amount = sandwich.profit_amount
-        transaction_to_address = front_matching_payment.transaction_to_address
-        transaction_from_address= front_matching_payment.transaction_from_address
-        coinbase_transfer = front_matching_payment.coinbase_transfer + back_matching_payment.coinbase_transfer
-        price = get_cached_price(hours=2)
-        cost = (front_matching_payment.gas_price*front_matching_payment.gas_used) + (back_matching_payment.gas_price*back_matching_payment.gas_used) + coinbase_transfer
-        cost_usd = cost * price['0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c']
-        profit_usd = profit_amount * price[profit_token_address]
-        sandwich_models.append(SandwichViewModel(
-            id = sandwich_id,
-            sandwicher_address = sandwicher_address,
-            block_number = block_number,
-            frontrun_transaction_hash = sandwich.frontrun_swap.transaction_hash,
-            backrun_transaction_hash = sandwich.backrun_swap.transaction_hash,
-            frontrun_swap = frontrun_swap,
-            backrun_swap = backrun_swap,
-            profit_token_address = profit_token_address,
-            profit_amount = profit_amount,
-            cost = cost,
-            sandwiched_swaps = sandwiched_swaps,
-            transaction_to_address = transaction_to_address,
-            transaction_from_address = transaction_from_address,
-            cost_usd = cost_usd,
-            profit_usd = profit_usd,
-            protocols= list(protocols)
-        ))
+        if price[profit_token_address]:
+            profit_amount = sandwich.profit_amount
+            transaction_to_address = front_matching_payment.transaction_to_address
+            transaction_from_address= front_matching_payment.transaction_from_address
+            coinbase_transfer = front_matching_payment.coinbase_transfer + back_matching_payment.coinbase_transfer
+            price = get_cached_price(hours=2)
+            cost = (front_matching_payment.gas_price*front_matching_payment.gas_used) + (back_matching_payment.gas_price*back_matching_payment.gas_used) + coinbase_transfer
+            cost_usd = cost * price['0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c']
+            profit_usd = profit_amount * price[profit_token_address]
+    
+            sandwich_models.append(SandwichViewModel(
+                id = sandwich_id,
+                sandwicher_address = sandwicher_address,
+                block_number = block_number,
+                frontrun_transaction_hash = sandwich.frontrun_swap.transaction_hash,
+                backrun_transaction_hash = sandwich.backrun_swap.transaction_hash,
+                frontrun_swap = frontrun_swap,
+                backrun_swap = backrun_swap,
+                profit_token_address = profit_token_address,
+                profit_amount = profit_amount,
+                cost = cost,
+                sandwiched_swaps = sandwiched_swaps,
+                transaction_to_address = transaction_to_address,
+                transaction_from_address = transaction_from_address,
+                cost_usd = cost_usd,
+                profit_usd = profit_usd,
+                protocols= list(protocols)
+            ))
     if len(sandwich_models) > 0:
         db_session.bulk_save_objects(sandwich_models)
         db_session.commit()
