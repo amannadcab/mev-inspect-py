@@ -168,7 +168,7 @@ def write_sandwichs_view(
         back_matching_payment = miners_payments_dict.get(sandwich.backrun_swap.transaction_hash)
         profit_token_address = sandwich.profit_token_address
         price = get_cached_price(hours=2)
-        if price[profit_token_address]:
+        if profit_token_address in price:
             profit_amount = sandwich.profit_amount
             transaction_to_address = front_matching_payment.transaction_to_address
             transaction_from_address= front_matching_payment.transaction_from_address

@@ -157,7 +157,7 @@ def write_arbitrage_view(
         transaction_to_address = matching_payment.transaction_to_address
         transaction_from_address= matching_payment.transaction_from_address
         prices = get_cached_price(hours=2)
-        if prices[profit_token_address]:
+        if profit_token_address in prices:
             arbitrageview_models.append(
                 ArbitrageViewModel(
                     id = arbitrage_id,
