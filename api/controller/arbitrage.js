@@ -42,11 +42,11 @@ async function getRecentTranscations() {
   const client = await pool.connect();
   try {
     const recentTransactions = await client.query(
-      `SELECT * FROM  arbitrages_view av WHERE  av.profit_usd < 2000000000000000000 AND av.transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') ORDER BY av.block_number DESC LIMIT 10;`
+      `SELECT * FROM  arbitrages_view av WHERE  av.profit_usd < 2000000000000000000 ORDER BY av.block_number DESC LIMIT 10;`
     );
 
     const sandwichedTransaction = await client.query(
-      `SELECT * FROM sandwiched_view sv WHERE sv.profit_usd < 2000000000000000000 AND sv.frontrun_transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') AND  sv.backrun_transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') ORDER BY sv.block_number DESC LIMIT 10;`
+      `SELECT * FROM sandwiched_view sv WHERE sv.profit_usd < 2000000000000000000 ORDER BY sv.block_number DESC LIMIT 10;`
     );
 
     arbtxs = recentTransactions.rows.map((d) => {
@@ -162,13 +162,13 @@ async function getTopTranscations() {
     //   `SELECT * FROM  arbitrages_view av WHERE av.profit_usd < 2000000000000000000 AND av.transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') ORDER BY av.profit_usd DESC LIMIT 2;`
     // );
     const recentTransactions = await client.query(
-      `SELECT * FROM  arbitrages_view av WHERE av.profit_usd < 2000000000000000000  ORDER BY av.block_number DESC LIMIT 2;`
+      `SELECT * FROM  arbitrages_view av WHERE av.profit_usd < 2000000000000000000  ORDER BY av.block_number DESC LIMIT 10;`
     );
     // const sandwichedTransaction = await client.query(
     //   `SELECT * FROM sandwiched_view sv WHERE sv.profit_usd < 2000000000000000000 AND sv.frontrun_transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') AND  sv.backrun_transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') ORDER BY sv.block_number DESC LIMIT 2;`
     // );
     const sandwichedTransaction = await client.query(
-      `SELECT * FROM sandwiched_view sv WHERE sv.profit_usd < 2000000000000000000  ORDER BY sv.block_number DESC LIMIT 2;`
+      `SELECT * FROM sandwiched_view sv WHERE sv.profit_usd < 2000000000000000000  ORDER BY sv.block_number DESC LIMIT 10;`
     );
     arbtxs = recentTransactions.rows.map((d) => {
       let obj = {};
