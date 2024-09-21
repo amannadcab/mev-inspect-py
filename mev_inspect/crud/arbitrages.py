@@ -106,7 +106,6 @@ def write_arbitrages(
         db_session.commit()
 
 
-
 def write_arbitrage_view(
     db_session,
     arbitrages: List[Arbitrage],
@@ -158,27 +157,28 @@ def write_arbitrage_view(
         transaction_from_address= matching_payment.transaction_from_address
         prices = get_cached_price(hours=2)
         if profit_token_address in prices:
-            arbitrageview_models.append(
-                ArbitrageViewModel(
-                    id = arbitrage_id,
-                    block_number = block_number,
-                    transaction_from_address = transaction_from_address,
-                    transaction_to_address = transaction_to_address,
-                    transaction_hash = transaction_hash,
-                    profit_token_address = profit_token_address,
-                    profit_amount = profit_amount,
-                    swaps = swaps,
-                    transfers = transfers_dict[transaction_hash],
-                    miner_address = miner_address,
-                    coinbase_transfer = coinbase_transfer,
-                    base_fee_per_gas = base_fee_per_gas,
-                    gas_price = gas_price,
-                    gas_price_with_coinbase_transfer = gas_price_with_coinbase_transfer,
-                    gas_used = gas_used,
-                    profit_usd = profit_amount*prices[profit_token_address],
-                    cost_usd = ((gas_price * gas_used))*prices["0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"],
-                    protocols = list(protocols)
-                )
+            if transaction_from_address and transaction_to_address:
+                arbitrageview_models.append(
+                    ArbitrageViewModel(
+                        id = arbitrage_id,
+                        block_number = block_number,
+                        transaction_from_address = transaction_from_address,
+                        transaction_to_address = transaction_to_address,
+                        transaction_hash = transaction_hash,
+                        profit_token_address = profit_token_address,
+                        profit_amount = profit_amount,
+                        swaps = swaps,
+                        transfers = transfers_dict[transaction_hash],
+                        miner_address = miner_address,
+                        coinbase_transfer = coinbase_transfer,
+                        base_fee_per_gas = base_fee_per_gas,
+                        gas_price = gas_price,
+                        gas_price_with_coinbase_transfer = gas_price_with_coinbase_transfer,
+                        gas_used = gas_used,
+                        profit_usd = profit_amount*prices[profit_token_address],
+                        cost_usd = ((gas_price * gas_used))*prices["0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"],
+                        protocols = list(protocols)
+                    )
             )
 
     if len(arbitrageview_models) > 0:
