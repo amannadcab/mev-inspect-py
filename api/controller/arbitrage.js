@@ -41,9 +41,7 @@ async function getDailyTransaction(day = 1) {
 async function getRecentTranscations() {
   const client = await pool.connect();
   try {
-    const recentTransactions = await client.query(
-      `SELECT * FROM  arbitrages_view av WHERE av.transaction_to_address = '0xcd8b100e5495C9bdaf1F4F7C3c399989B1234cFe' ORDER BY av.block_number DESC LIMIT 10;`
-    );
+    const recentTransactions = await client.query(`SELECT * FROM  arbitrages_view av WHERE av.transaction_to_address = '0xcd8b100e5495C9bdaf1F4F7C3c399989B1234cFe' ORDER BY av.block_number DESC LIMIT 10;`);
 
     const sandwichedTransaction = await client.query(
       `SELECT * FROM sandwiched_view sv WHERE sv.profit_usd < 2000000000000000000 ORDER BY sv.block_number DESC LIMIT 10;`
