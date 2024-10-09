@@ -6,6 +6,7 @@ const {
   getDailyTransaction,
   getRecentTranscations,
   getTopTranscations,
+  getLiquidationTranscations,
   loadPrice,
 } = require("./controller/arbitrage");
 
@@ -37,6 +38,9 @@ io.on("connection", async(socket) => {
 
   const topdata = await getTopTranscations();
   socket.emit("top", JSON.stringify({ status: true, data: topdata }));
+
+  const liquidationdata = await getLiquidationTranscations();
+  socket.emit("liquidation", JSON.stringify({ status: true, data: liquidationdata }));
 
   socket.on("disconnect", (reason) => {
     console.log("User disconnected:", reason);
@@ -82,7 +86,7 @@ app.get("/api/top", async (req, res) => {
 
 let clock = 0;
 
-let statsD,recentD,topD;
+let statsD,recentD,topD,liquiditationD;
 
 async function socketRecentTransaction() {
   const data = await getRecentTranscations();
@@ -108,6 +112,13 @@ async function socketTopTranscations() {
   }
 }
 
+async function socketLiquidationTranscations() {
+  const data = await getLiquidationTranscations();
+  if(( Number(data?.arbitrageBlock) >  Number(liquiditationD?.arbitrageBlock))|| (Number(data?.sandwichBlock) >  Number(liquiditationD?.sandwichBlock)) || !liquiditationD) {
+    liquiditationD = data;
+    io.emit("liquidation", JSON.stringify({ status: true, data: liquiditationD }));
+  }
+}
 const PORT = process.env.PORT || 3000;
 
 server.listen(4000, () => {
@@ -122,6 +133,7 @@ app.listen(PORT, async () => {
       await socketRecentTransaction();
       await socketStats();
       await socketTopTranscations();
+      await socketLiquidationTranscations();
       clock = 0;
     }
   }, 10000);

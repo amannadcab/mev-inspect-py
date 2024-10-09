@@ -174,65 +174,65 @@ async def inspect_many_blocks(
     delete_blocks(inspect_db_session, after_block_number, before_block_number)
     write_blocks(inspect_db_session, all_blocks)
 
-    if should_write_classified_traces:
-        delete_classified_traces_for_blocks(
-            inspect_db_session, after_block_number, before_block_number
-        )
-        write_classified_traces(inspect_db_session, all_classified_traces)
+    # if should_write_classified_traces:
+    #     delete_classified_traces_for_blocks(
+    #         inspect_db_session, after_block_number, before_block_number
+    #     )
+    #     write_classified_traces(inspect_db_session, all_classified_traces)
 
-    delete_transfers_for_blocks(
-        inspect_db_session, after_block_number, before_block_number
-    )
-    write_transfers(inspect_db_session, all_transfers)
+    # delete_transfers_for_blocks(
+    #     inspect_db_session, after_block_number, before_block_number
+    # )
+    # write_transfers(inspect_db_session, all_transfers)
 
-    delete_swaps_for_blocks(inspect_db_session, after_block_number, before_block_number)
-    write_swaps(inspect_db_session, all_swaps)
+    # delete_swaps_for_blocks(inspect_db_session, after_block_number, before_block_number)
+    # write_swaps(inspect_db_session, all_swaps)
 
-    delete_arbitrages_for_blocks(
-        inspect_db_session, after_block_number, before_block_number
-    )
-    write_arbitrages(inspect_db_session, all_arbitrages)
+    # delete_arbitrages_for_blocks(
+    #     inspect_db_session, after_block_number, before_block_number
+    # )
+    # write_arbitrages(inspect_db_session, all_arbitrages)
 
-    delete_liquidations_for_blocks(
-        inspect_db_session, after_block_number, before_block_number
-    )
-    write_liquidations(inspect_db_session, all_liquidations)
+    # delete_liquidations_for_blocks(
+    #     inspect_db_session, after_block_number, before_block_number
+    # )
+    # write_liquidations(inspect_db_session, all_liquidations)
 
-    delete_sandwiches_for_blocks(
-        inspect_db_session, after_block_number, before_block_number
-    )
+    # delete_sandwiches_for_blocks(
+    #     inspect_db_session, after_block_number, before_block_number
+    # )
     write_sandwichs_view(inspect_db_session,all_sandwiches,all_miner_payments,all_transfers,all_classified_traces)
-    write_sandwiches(inspect_db_session, all_sandwiches)
+    # write_sandwiches(inspect_db_session, all_sandwiches)
 
-    delete_punk_bids_for_blocks(
-        inspect_db_session, after_block_number, before_block_number
-    )
-    write_punk_bids(inspect_db_session, all_punk_bids)
+    # delete_punk_bids_for_blocks(
+    #     inspect_db_session, after_block_number, before_block_number
+    # )
+    # write_punk_bids(inspect_db_session, all_punk_bids)
 
-    delete_punk_bid_acceptances_for_blocks(
-        inspect_db_session, after_block_number, before_block_number
-    )
-    write_punk_bid_acceptances(inspect_db_session, all_punk_bid_acceptances)
+    # delete_punk_bid_acceptances_for_blocks(
+    #     inspect_db_session, after_block_number, before_block_number
+    # )
+    # write_punk_bid_acceptances(inspect_db_session, all_punk_bid_acceptances)
 
-    delete_punk_snipes_for_blocks(
-        inspect_db_session, after_block_number, before_block_number
-    )
-    write_punk_snipes(inspect_db_session, all_punk_snipes)
+    # delete_punk_snipes_for_blocks(
+    #     inspect_db_session, after_block_number, before_block_number
+    # )
+    # write_punk_snipes(inspect_db_session, all_punk_snipes)
 
-    delete_nft_trades_for_blocks(
-        inspect_db_session, after_block_number, before_block_number
-    )
-    write_nft_trades(inspect_db_session, all_nft_trades)
+    # delete_nft_trades_for_blocks(
+    #     inspect_db_session, after_block_number, before_block_number
+    # )
+    # write_nft_trades(inspect_db_session, all_nft_trades)
 
-    delete_miner_payments_for_blocks(
-        inspect_db_session, after_block_number, before_block_number
-    )
-    write_miner_payments(inspect_db_session, all_miner_payments)
+    # delete_miner_payments_for_blocks(
+    #     inspect_db_session, after_block_number, before_block_number
+    # )
+    # write_miner_payments(inspect_db_session, all_miner_payments)
     write_arbitrage_view(inspect_db_session,all_arbitrages,all_miner_payments,all_transfers,all_classified_traces)
-    update_summary_for_block_range(
-        inspect_db_session,
-        after_block_number,
-        before_block_number,
-    )
+    # update_summary_for_block_range(
+    #     inspect_db_session,
+    #     after_block_number,
+    #     before_block_number,
+    # )
 
     logger.info("Done writing")
