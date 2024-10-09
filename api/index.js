@@ -108,7 +108,7 @@ async function socketRecentTransaction() {
 
 async function socketStats() {
   const data  = await getDailyTransaction();
-  if(Number(data?.totalArbitrageUsd) != Number(statsD?.totalArbitrageUsd)|| Number(data.totalSandwichUsd) != Number(statsD?.totalSandwichUsd) || !statsD) {
+  if(Number(data?.totalArbitrageUsd) != Number(statsD?.totalArbitrageUsd)|| Number(data.totalSandwichUsd) != Number(statsD?.totalSandwichUsd) || Number(data.totalLiquidationusd) != Number(statsD?.totalLiquidationusd) || !statsD) {
     statsD = data;
     io.emit("stats", JSON.stringify({ status: true, data: statsD }));
   }
