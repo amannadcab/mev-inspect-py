@@ -84,6 +84,16 @@ app.get("/api/top", async (req, res) => {
   }
 });
 
+
+app.get("/api/liquidation", async (req, res) => {
+  try {
+    const data = await getLiquidationTranscations();
+    return res.status(200).send({ status: true, data: data });
+  } catch (e) {
+    console.log(e);
+    return res.status(400).send({ status: false, data: [] });
+  }
+});
 let clock = 0;
 
 let statsD,recentD,topD,liquiditationD;
