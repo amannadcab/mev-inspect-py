@@ -8,19 +8,15 @@ async function getDailyTransaction(day = 1) {
     const client = await pool.connect();
 
     const arbitrageUsd = await client.query(
-      `SELECT a.profit_token_address, t.decimals, SUM(a.profit_usd) AS total_profit_amount FROM  arbitrages_view a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address)  WHERE  a.profit_usd > 0 AND a.created_at >= NOW() - INTERVAL '${day} day' AND a.transaction_to_address = '0x3374478ED64fab1C3C457d2dad7Dd106325BeC27'  GROUP BY a.profit_token_address, t.decimals;`
+      `SELECT a.profit_token_address, t.decimals, SUM(a.profit_usd) AS total_profit_amount FROM  arbitrages_view a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address)  WHERE  a.profit_usd > 0 AND a.profit_usd < 2000000000000000000 AND a.created_at >= NOW() - INTERVAL '${day} day' AND a.transaction_to_address = '0x3374478ED64fab1C3C457d2dad7Dd106325BeC27'  GROUP BY a.profit_token_address, t.decimals;`
     );
 
     const liquidationUsd = await client.query(
-      `SELECT a.profit_token_address, t.decimals, SUM(a.profit_usd) AS total_profit_amount FROM  arbitrages_view a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address)  WHERE  a.profit_usd > 0 AND a.created_at >= NOW() - INTERVAL '${day} day' AND a.transaction_to_address = '0xcd8b100e5495C9bdaf1F4F7C3c399989B1234cFe'  GROUP BY a.profit_token_address, t.decimals;`
+      `SELECT a.profit_token_address, t.decimals, SUM(a.profit_usd) AS total_profit_amount FROM  arbitrages_view a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address)  WHERE  a.profit_usd > 0 AND a.profit_usd < 2000000000000000000 AND a.created_at >= NOW() - INTERVAL '${day} day' AND a.transaction_to_address = '0xcd8b100e5495C9bdaf1F4F7C3c399989B1234cFe'  GROUP BY a.profit_token_address, t.decimals;`
     );
 
     const sandwichUsd = await client.query(
-      `SELECT s.profit_token_address, t.decimals, SUM(s.profit_usd) AS total_profit_amount FROM sandwiched_view s JOIN tokens t ON  LOWER(s.profit_token_address) = LOWER(t.token_address) WHERE  s.profit_amount > 0 AND sv.transaction_from_address IN ('0x68394B4aDd514A8fB3Dee310a13FB8A5C5BB4Fcd',
-                                      '0x62EfeE356F57dc2e7BF38a16924cEf2435E3446E',
-                                      '0x2a7C2eCffEa2A72b10b6dC6DC9ac3d5efc18B2C2',
-                                      '0x7CE905Be379C6E8c88b0173f0043B256729593CA',
-                                      '0x900518D54AbCA7505Be000eb0030d7B33c715625') AND s.created_at >= NOW() - INTERVAL '${day} day' GROUP BY s.profit_token_address ,t.decimals;`
+      `SELECT s.profit_token_address, t.decimals, SUM(s.profit_usd) AS total_profit_amount FROM sandwiched_view s JOIN tokens t ON  LOWER(s.profit_token_address) = LOWER(t.token_address) WHERE  s.profit_amount > 0 AND s.profit_usd < 2000000000000000000 AND s.created_at >= NOW() - INTERVAL '${day} day' GROUP BY s.profit_token_address ,t.decimals;`
     );
 
     arbSum = 0;
@@ -60,15 +56,7 @@ async function getRecentTranscations() {
     );
 
     const sandwichedTransaction = await client.query(
-      `SELECT * 
-FROM sandwiched_view sv 
-WHERE sv.transaction_from_address IN ('0x68394B4aDd514A8fB3Dee310a13FB8A5C5BB4Fcd',
-                                      '0x62EfeE356F57dc2e7BF38a16924cEf2435E3446E',
-                                      '0x2a7C2eCffEa2A72b10b6dC6DC9ac3d5efc18B2C2',
-                                      '0x7CE905Be379C6E8c88b0173f0043B256729593CA',
-                                      '0x900518D54AbCA7505Be000eb0030d7B33c715625')
-ORDER BY sv.block_number DESC 
-LIMIT 10;`
+      `SELECT * FROM sandwiched_view sv WHERE sv.transaction_from_address IN ('0x68394B4aDd514A8fB3Dee310a13FB8A5C5BB4Fcd','0x62EfeE356F57dc2e7BF38a16924cEf2435E3446E','0x2a7C2eCffEa2A72b10b6dC6DC9ac3d5efc18B2C2','0x7CE905Be379C6E8c88b0173f0043B256729593CA','0x900518D54AbCA7505Be000eb0030d7B33c715625') ORDER BY sv.block_number DESC LIMIT 10;`
     );
 
     arbtxs = recentTransactions.rows.map((d) => {
