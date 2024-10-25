@@ -3,8 +3,8 @@ const { Pool } = require("pg");
 // Create a PostgreSQL pool connection
 const pool = new Pool({
   user: "mevowner",
-  host: "64.227.129.194",
-  database: "mev_inspect",
+  host: "3.214.251.137",
+  database: "mev_inspect_polygon",
   password: "SRTrDKSqeH",
   max: 150,
   keepAlive: true,
