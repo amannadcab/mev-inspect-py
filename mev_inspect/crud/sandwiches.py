@@ -18,7 +18,7 @@ cache = {
 }
 
 def load_price():
-    res = requests.get("https://api.sushi.com/price/v1/56")
+    res = requests.get("https://api.sushi.com/price/v1/137")
     data = json.loads(res.text)
     return data
 
@@ -174,7 +174,7 @@ def write_sandwichs_view(
             transaction_from_address= front_matching_payment.transaction_from_address
             coinbase_transfer = front_matching_payment.coinbase_transfer + back_matching_payment.coinbase_transfer
             cost = (front_matching_payment.gas_price*front_matching_payment.gas_used) + (back_matching_payment.gas_price*back_matching_payment.gas_used) + coinbase_transfer
-            cost_usd = cost * price['0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c']
+            cost_usd = cost * price['0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270']
             profit_usd = profit_amount * price[profit_token_address]
     
             sandwich_models.append(SandwichViewModel(

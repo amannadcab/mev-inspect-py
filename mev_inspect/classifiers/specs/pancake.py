@@ -160,103 +160,102 @@ PANCAKE_V3_GENERAL_SPECS = [
 
 
 PANCAKEPY_V2_CONTRACT_SPECS = [
-     ClassifierSpec(
+    ClassifierSpec(
         abi_name="PancakeV2Router",
-        protocol=Protocol.pancake_v2, # uniswap
-        valid_contract_addresses=["0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24"],
+        protocol=Protocol.pancake_v2, # quickswap
+        valid_contract_addresses=["0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff"],
     ),
     ClassifierSpec(
         abi_name="PancakeV2Router",
         protocol=Protocol.pancake_v2,
-        valid_contract_addresses=["0x10ED43C718714eb63d5aA57B78B54704E256024E"],
+        valid_contract_addresses=["0xedf6066a2b290C185783862C7F4776A2C8077AD1"],
     ),
-    ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap,
-        valid_contract_addresses=["0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506"],
-    ),
-    ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap, #apeswap
-        valid_contract_addresses=["0xcF0feBd3f17CEf5b47b0cD257aCf6025c5BFf3b7"],
-    ),
-    ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap, #biswap
-        valid_contract_addresses=["0x3a6d8cA21D1CF76F653A67577FA0D27453350dD"],
-    ),
-    ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap, #backeryswap
-        valid_contract_addresses=["0xCDe540d7eAFE93aC5fE6233Bee57E1270D3E330F"],
-    ),
-        ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap, #mdex
-        valid_contract_addresses=["0x62c1A0d92B09D0912F7BB9c96C5ecdC7F2b87059"],
-    ),
-    ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap, #babySwap
-        valid_contract_addresses=["0x8317c460C22A9958c27b4B6403b98d2Ef4E2ad32"],
-    ),
-    ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap, #babyDogeSwap
-        valid_contract_addresses=["0xC9a0F685F39d05D835c369036251ee3aEaaF3c47"],
-    ),
+    # ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap,
+    #     valid_contract_addresses=["0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506"],
+    # ),
+    # ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap, #apeswap
+    #     valid_contract_addresses=["0xcF0feBd3f17CEf5b47b0cD257aCf6025c5BFf3b7"],
+    # ),
+    # ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap, #biswap
+    #     valid_contract_addresses=["0x3a6d8cA21D1CF76F653A67577FA0D27453350dD"],
+    # ),
+    # ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap, #backeryswap
+    #     valid_contract_addresses=["0xCDe540d7eAFE93aC5fE6233Bee57E1270D3E330F"],
+    # ),
+    #     ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap, #mdex
+    #     valid_contract_addresses=["0x62c1A0d92B09D0912F7BB9c96C5ecdC7F2b87059"],
+    # ),
+    # ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap, #babySwap
+    #     valid_contract_addresses=["0x8317c460C22A9958c27b4B6403b98d2Ef4E2ad32"],
+    # ),
+    # ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap, #babyDogeSwap
+    #     valid_contract_addresses=["0xC9a0F685F39d05D835c369036251ee3aEaaF3c47"],
+    # ),  
+    # ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap, #melegaSwap
+    #     valid_contract_addresses=["0xc25033218D181b27D4a2944Fbb04FC055da4EAB3"],
+    # ),
+    # ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap, #nomiswap
+    #     valid_contract_addresses=["0x13147820401f455e3318db8686958D457ad2E7b0"],
+    # ),
+    # ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap, #autoshark
+    #     valid_contract_addresses=["0xB0EeB0632bAB15F120735e5838908378936bd484"],
+    # ),
+    # ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap, #jetswap
+    #     valid_contract_addresses=["0xbe65b8f75b9f20f4c522e0067a3887fada714800"],
+    # ),
+    # ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap, #knightswap
+    #     valid_contract_addresses=["0x05E61E0cDcD2170a76F9568a110CEe3AFdD6c46f"],
+    # ),
+    #     ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap, #pinkswap
+    #     valid_contract_addresses=["0x319EF69a98c8E8aAB36Aea561Daba0Bf3D0fa3ac"],
+    # ),
     
-    ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap, #melegaSwap
-        valid_contract_addresses=["0xc25033218D181b27D4a2944Fbb04FC055da4EAB3"],
-    ),
-    ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap, #nomiswap
-        valid_contract_addresses=["0x13147820401f455e3318db8686958D457ad2E7b0"],
-    ),
-    ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap, #autoshark
-        valid_contract_addresses=["0xB0EeB0632bAB15F120735e5838908378936bd484"],
-    ),
-    ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap, #jetswap
-        valid_contract_addresses=["0xbe65b8f75b9f20f4c522e0067a3887fada714800"],
-    ),
-    ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap, #knightswap
-        valid_contract_addresses=["0x05E61E0cDcD2170a76F9568a110CEe3AFdD6c46f"],
-    ),
-        ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap, #pinkswap
-        valid_contract_addresses=["0x319EF69a98c8E8aAB36Aea561Daba0Bf3D0fa3ac"],
-    ),
-    
-        ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap, #pandaswap
-        valid_contract_addresses=["0x29D1Adbb65d93a5710cafe2EF0E8131f64E6AB22"],
-    ),
-    ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap, #definixSwap
-        valid_contract_addresses=["0x151030a9Fa62FbB202eEe50Bd4A4057AB9E826AD"],
-    ),
-    ClassifierSpec(
-        abi_name="UniswapV2Router",
-        protocol=Protocol.sushiswap, #Impossible finance
-        valid_contract_addresses=["0x56F6Ca0a3364Fa3aC9F0E8E9858b2966CdF39d03"],
-    ),
-    ClassifierSpec(
-        abi_name="OdosRouter",
-        protocol=Protocol.odos, #Odos finance
-        valid_contract_addresses=["0x89b8aa89fdd0507a99d334cbe3c808fafc7d850e"],
-    ),
+    #     ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap, #pandaswap
+    #     valid_contract_addresses=["0x29D1Adbb65d93a5710cafe2EF0E8131f64E6AB22"],
+    # ),
+    # ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap, #definixSwap
+    #     valid_contract_addresses=["0x151030a9Fa62FbB202eEe50Bd4A4057AB9E826AD"],
+    # ),
+    # ClassifierSpec(
+    #     abi_name="UniswapV2Router",
+    #     protocol=Protocol.sushiswap, #Impossible finance
+    #     valid_contract_addresses=["0x56F6Ca0a3364Fa3aC9F0E8E9858b2966CdF39d03"],
+    # ),
+    # ClassifierSpec(
+    #     abi_name="OdosRouter",
+    #     protocol=Protocol.odos, #Odos finance
+    #     valid_contract_addresses=["0x89b8aa89fdd0507a99d334cbe3c808fafc7d850e"],
+    # ),
 ]
 
 PANCAKEPY_V2_PAIR_SPEC = ClassifierSpec(

@@ -23,7 +23,7 @@ def get_inspect_database_uri():
     username = os.getenv("POSTGRES_USER")
     password = os.getenv("POSTGRES_PASSWORD")
     host = os.getenv("POSTGRES_HOST")
-    db_name = "mev_inspect"
+    db_name = "mev_inspect_polygon"
     return f"postgresql+psycopg2://{username}:{password}@{host}/{db_name}"
 
 

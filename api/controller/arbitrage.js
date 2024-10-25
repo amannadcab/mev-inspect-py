@@ -8,7 +8,7 @@ async function getDailyTransaction(day = 1) {
     const client = await pool.connect();
 
     const arbitrageUsd = await client.query(
-      `SELECT a.profit_token_address, t.decimals, SUM(a.profit_usd) AS total_profit_amount FROM  arbitrages_view a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address)  WHERE  a.profit_usd > 0 AND a.profit_usd < 2000000000000000000 AND a.created_at >= NOW() - INTERVAL '${day} day' AND a.transaction_to_address = '0x3374478ED64fab1C3C457d2dad7Dd106325BeC27'  GROUP BY a.profit_token_address, t.decimals;`
+      `SELECT a.profit_token_address, t.decimals, SUM(a.profit_usd) AS total_profit_amount FROM  arbitrages_view a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address)  WHERE  a.profit_usd > 0 AND a.profit_usd < 2000000000000000000 AND a.created_at >= NOW() - INTERVAL '${day} day' AND a.transaction_to_address = '0x3b5997FfAF9B551b7A407C9FE310732A04b5A850'  GROUP BY a.profit_token_address, t.decimals;`
     );
 
     const liquidationUsd = await client.query(
@@ -52,7 +52,7 @@ async function getRecentTranscations() {
   const client = await pool.connect();
   try {
     const recentTransactions = await client.query(
-      `SELECT * FROM  arbitrages_view av WHERE av.transaction_to_address = '0x3374478ED64fab1C3C457d2dad7Dd106325BeC27' ORDER BY av.block_number DESC LIMIT 10;`
+      `SELECT * FROM  arbitrages_view av WHERE av.transaction_to_address = '0x3b5997FfAF9B551b7A407C9FE310732A04b5A850' ORDER BY av.block_number DESC LIMIT 10;`
     );
 
     const sandwichedTransaction = await client.query(
@@ -289,7 +289,7 @@ async function getTopTranscations() {
     //   `SELECT * FROM  arbitrages_view av WHERE av.profit_usd < 2000000000000000000 AND av.transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') ORDER BY av.profit_usd DESC LIMIT 2;`
     // );
     const recentTransactions = await client.query(
-      `SELECT * FROM  arbitrages_view av WHERE  av.transaction_to_address = '0x3374478ED64fab1C3C457d2dad7Dd106325BeC27' ORDER BY av.block_number DESC LIMIT 10;`
+      `SELECT * FROM  arbitrages_view av WHERE  av.transaction_to_address = '0x3b5997FfAF9B551b7A407C9FE310732A04b5A850' ORDER BY av.block_number DESC LIMIT 10;`
     );
     // const sandwichedTransaction = await client.query(
     //   `SELECT * FROM sandwiched_view sv WHERE sv.profit_usd < 2000000000000000000 AND sv.frontrun_transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') AND  sv.backrun_transaction_hash NOT IN (SELECT transaction_hash FROM classified_traces WHERE error = 'Reverted') ORDER BY sv.block_number DESC LIMIT 2;`

@@ -19,7 +19,7 @@ cache = {
 }
 
 def load_price():
-    res = requests.get("https://api.sushi.com/price/v1/56")
+    res = requests.get("https://api.sushi.com/price/v1/137")
     data = json.loads(res.text)
     return data
 
@@ -176,7 +176,7 @@ def write_arbitrage_view(
                         gas_price_with_coinbase_transfer = gas_price_with_coinbase_transfer,
                         gas_used = gas_used,
                         profit_usd = profit_amount*prices[profit_token_address],
-                        cost_usd = ((gas_price * gas_used))*prices["0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"],
+                        cost_usd = ((gas_price * gas_used))*prices["0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270"],
                         protocols = list(protocols)
                     )
             )
