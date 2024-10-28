@@ -302,3 +302,14 @@ If you find a security vulnerability on this project or any other initiative rel
 ---
 
 Made with ☀️  by the ⚡🤖 collective.
+
+
+
+## Setup 
+sudo apt-get install python3.9 python3.9-venv python3.9-dev
+python3.9 -m venv myenv
+source myenv/bin/activate
+
+pip install cytoolz
+
+poetry install
