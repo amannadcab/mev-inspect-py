@@ -21,17 +21,17 @@ async function getDailyTransaction(day = 1) {
 
     arbSum = 0;
     arbitrageUsd.rows.forEach((row) => {
-      arbSum += Number(row.total_profit_amount) / 10 ** Number(row.decimals);
+      arbSum += Number(row.total_profit_amount) / 10 ** Number(6);
     });
 
     sandSum = 0;
     sandwichUsd.rows.forEach((row) => {
-      sandSum += Number(row.total_profit_amount) / 10 ** Number(row.decimals);
+      sandSum += Number(row.total_profit_amount) / 10 ** Number(6);
     });
     let liquidationSum = 0;
     liquidationUsd.rows.forEach((row) => {
       liquidationSum +=
-        Number(row.total_profit_amount) / 10 ** Number(row.decimals);
+        Number(row.total_profit_amount) / 10 ** Number(6);
     });
     client.release();
     return {
