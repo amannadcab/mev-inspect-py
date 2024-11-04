@@ -8,15 +8,15 @@ async function getDailyTransaction(day = 1) {
     const client = await pool.connect();
 
     const arbitrageUsd = await client.query(
-      `SELECT a.profit_token_address, t.decimals, SUM(a.profit_usd) AS total_profit_amount FROM  arbitrages_view a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address)  WHERE  a.profit_usd > 0 AND a.profit_usd < 2000000000000000000 AND a.created_at >= NOW() - INTERVAL '${day} day' AND a.transaction_to_address = '0x3b5997FfAF9B551b7A407C9FE310732A04b5A850'  GROUP BY a.profit_token_address, t.decimals;`
+      `SELECT a.profit_token_address , SUM(a.profit_usd) AS total_profit_amount FROM  arbitrages_view a   WHERE  a.profit_usd > 0 AND a.profit_usd < 2000000000000000000 AND a.created_at >= NOW() - INTERVAL '${day} day' AND a.transaction_to_address = '0x3b5997FfAF9B551b7A407C9FE310732A04b5A850'  GROUP BY a.profit_token_address;`
     );
 
     const liquidationUsd = await client.query(
-      `SELECT a.profit_token_address, t.decimals, SUM(a.profit_usd) AS total_profit_amount FROM  arbitrages_view a JOIN tokens t ON  LOWER(a.profit_token_address) = LOWER(t.token_address)  WHERE  a.profit_usd > 0 AND a.profit_usd < 2000000000000000000 AND a.created_at >= NOW() - INTERVAL '${day} day' AND a.transaction_to_address = '0xcd8b100e5495C9bdaf1F4F7C3c399989B1234cFe'  GROUP BY a.profit_token_address, t.decimals;`
+      `SELECT a.profit_token_address, SUM(a.profit_usd) AS total_profit_amount FROM  arbitrages_view a   WHERE  a.profit_usd > 0 AND a.profit_usd < 2000000000000000000 AND a.created_at >= NOW() - INTERVAL '${day} day' AND a.transaction_to_address = '0xcd8b100e5495C9bdaf1F4F7C3c399989B1234cFe'  GROUP BY a.profit_token_address`
     );
 
     const sandwichUsd = await client.query(
-      `SELECT s.profit_token_address, t.decimals, SUM(s.profit_usd) AS total_profit_amount FROM sandwiched_view s JOIN tokens t ON  LOWER(s.profit_token_address) = LOWER(t.token_address) WHERE  s.profit_amount > 0 AND s.profit_usd < 2000000000000000000 AND s.created_at >= NOW() - INTERVAL '${day} day' GROUP BY s.profit_token_address ,t.decimals;`
+      `SELECT s.profit_token_address, SUM(s.profit_usd) AS total_profit_amount FROM sandwiched_view s WHERE  s.profit_amount > 0 AND s.profit_usd < 2000000000000000000 AND s.created_at >= NOW() - INTERVAL '${day} day' GROUP BY s.profit_token_address;`
     );
 
     arbSum = 0;
