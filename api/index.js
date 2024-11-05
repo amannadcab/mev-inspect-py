@@ -76,8 +76,9 @@ app.get("/api/recents", async (req, res) => {
 });
 
 app.get("/api/arbitrage", async (req, res) => {
+  let limit = req.query.limit;
   try {
-    const data = await getArbitrageTransactions();
+    const data = await getArbitrageTransactions(limit);
     return res.status(200).send({ status: true, data: data });
   } catch (error) {
     console.log(error);

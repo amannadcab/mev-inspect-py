@@ -415,11 +415,11 @@ async function getTopTranscations() {
   }
 }
 
-async function getArbitrageTransactions() {
+async function getArbitrageTransactions(limit=15) {
   const client = await pool.connect();
   try {
     const recentTransactions = await client.query(
-      `SELECT * FROM  arbitrages_view av ORDER BY av.block_number DESC LIMIT 50;`
+      `SELECT * FROM  arbitrages_view av ORDER BY av.block_number DESC LIMIT ${limit};`
     );
     let arbtxs = recentTransactions.rows.map((d) => {
       let obj = {};
