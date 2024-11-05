@@ -7,6 +7,7 @@ const {
   getRecentTranscations,
   getTopTranscations,
   getLiquidationTranscations,
+  getArbitrageTransactions,
   loadPrice,
 } = require("./controller/arbitrage");
 
@@ -74,6 +75,16 @@ app.get("/api/recents", async (req, res) => {
   }
 });
 
+app.get("/api/arbitrage", async (req, res) => {
+  try {
+    const data = await getArbitrageTransactions();
+    return res.status(200).send({ status: true, data: data });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send({ status: false, data: [] });
+  }
+});
+
 app.get("/api/top", async (req, res) => {
   try {
     const data = await getTopTranscations();
@@ -83,7 +94,6 @@ app.get("/api/top", async (req, res) => {
     return res.status(400).send({ status: false, data: [] });
   }
 });
-
 
 app.get("/api/liquidation", async (req, res) => {
   try {

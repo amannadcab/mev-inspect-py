@@ -415,9 +415,44 @@ async function getTopTranscations() {
   }
 }
 
+async function getArbitrageTransactions() {
+  const client = await pool.connect();
+  try {
+    const recentTransactions = await client.query(
+      `SELECT * FROM  arbitrages_view av ORDER BY av.block_number DESC LIMIT 50;`
+    );
+    let arbtxs = recentTransactions.rows.map((d) => {
+      let obj = {};
+      obj.created_at = d.created_at;
+      obj.from = d.transaction_from_address;
+      obj.contract_address = d.transaction_to_address;
+      obj.transaction_hash = d.transaction_hash;
+      obj.protocols = d.protocols;
+      obj.transfers = d.transfers
+        .map((d) => d.token_address)
+        .filter(
+          (value, index, self) =>
+            self.findIndex(
+              (obj) => JSON.stringify(obj) === JSON.stringify(value)
+            ) === index
+        );
+      obj.block_number = d.block_number;
+      obj.profit_token_address = d.profit_token_address;
+      obj.gas_cost = d.cost_usd;
+      obj.profit_usd = d.profit_usd;
+      obj.type = "Arbitrage";
+      return obj;
+    });
+    return arbtxs;
+  } catch(e) {
+    console.log("Error:",e.message);
+  }
+}
+
 module.exports = {
   getDailyTransaction,
   getRecentTranscations,
   getTopTranscations,
   getLiquidationTranscations,
+  getArbitrageTransactions,
 };
